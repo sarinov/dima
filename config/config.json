@@ -1,10 +1,14 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "database_development",
+    "username": "postgres",
+    "password": "ggwp",
+    "database": "dima",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "port": "5432",
+    "dialect": "postgres",
+    "define": {
+      "timestamps": false
+    }
   },
   "test": {
     "username": "root",
