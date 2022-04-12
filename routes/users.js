@@ -13,7 +13,28 @@ router.get('/', (req, res) => {
 })
 
 .post('/', (req, res) => {
-    usersController.addUserArr(res.body)
+    let { arr } = req.body;
+    usersController.addUserArr(arr)
+    res.send(usersController.getUserArr())
+})
+
+.put("/:id", (req, res) => {
+
+    let { id } = req.params;
+
+    let { arr } = req.body;
+
+    usersController.changeUserArr(id,arr)
+
+    res.send(usersController.getUserArr())
+})
+
+.delete("/:id", async (req, res) => {
+
+    let {id} = req.params;
+
+    usersController.deleteUser(id);
+
     res.send(usersController.getUserArr())
 })
 
