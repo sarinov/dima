@@ -13,20 +13,24 @@ app.use(routes);
 
 
 
-app.listen(port, ()=> {
-    console.log(`Server listen: ${port} port`)
-})
-
 app.get('/', async (req, res) => {
     
     console.log(req.body)
     res.send('ok');
 })
 
-app.use(async (err, req, res, next) => {
+app.use((err, req, res, next) => {
     console.error(err);
     res.status(500).json(new Response().error({
         message: err.message,
         stack: err.stack
     }));
 })
+
+app.listen(port, ()=> {
+    console.log(`Server listen: ${port} port`)
+})
+
+
+
+
