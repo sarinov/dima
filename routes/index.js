@@ -3,9 +3,7 @@ const { Router } = require("express")
 const router = Router();
 
 
-router.use('/test', require('./test'))
-
-router.use('/user', require('./users'))
+router.use('/comments', require('./comments'))
 
 
 
