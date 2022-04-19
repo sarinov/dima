@@ -3,7 +3,7 @@ const Response = require('../utils/ApiResponse')
 const resp = new Response();
 const {validateInt, validateString} = require('../utils/validator')
 
-const commentsController = require('../controllers/comments')
+const postLikesController = require('../controllers/postLikes')
 
 const router = Router()
 
@@ -11,7 +11,7 @@ router
 
 .get('/', async (req, res) => {
     try{
-        return res.send(resp.data(await commentsController.getAll()))
+        return res.send(resp.data(await postLikesController.getAll()))
     }catch(e){
         return res.status(500).send(resp.error(e.message))
     }
@@ -23,7 +23,7 @@ router
     if(!validation.ok)  return res.status(400).send(resp.error(validation.message))
 
     try{
-        const result = await commentsController.getOne(id);
+        const result = await postLikesController.getOne(id);
         if(!result) return res.status(400).send(resp.error("Comment doesn`t exist!"))
         return res.send(resp.data(result))
     }catch(e){
@@ -32,16 +32,13 @@ router
 })
 
 .post('/', async (req, res) => {
-    const {content, postId, userId, time} = {...req.body, ...req.user}
+    const {postId, type, userId} = {...req.body, ...req.user}
 
     const validationInt = validateInt({postId, userId})
     if(!validationInt.ok)  return res.status(400).send(resp.error(validationInt.message))
 
-    const validationStr = validateString({content,time})
-    if(!validationStr.ok)  return res.status(400).send(resp.error(validationStr.message))
-
     try{
-        const result = await commentsController.create({content, postId, userId, time});
+        const result = await postLikesController.create({postId, type, userId});
         return res.send(resp.data(result))
     }catch(e){
         return res.status(500).send(resp.error(e.message))
@@ -52,16 +49,13 @@ router
 .put("/:id", async (req, res) => {
 
     const {id} = req.params;
-    const {content, postId, userId, time} = {...req.body, ...req.user}
+    const {postId, type, userId} = {...req.body, ...req.user}
 
-    const validationInt = validateInt({postId, id})
+    const validationInt = validateInt({postId, userId})
     if(!validationInt.ok)  return res.status(400).send(resp.error(validationInt.message))
 
-    const validationStr = validateString({content,time})
-    if(!validationStr.ok)  return res.status(400).send(resp.error(validationStr.message))
-
     try{
-        const result = await commentsController.update(id, {content, postId, userId, time});
+        const result = await postLikesController.update(id, {postId, type, userId});
         return res.send(resp.data(result))
     }catch(e){
         return res.status(500).send(resp.error(e.message))
@@ -75,7 +69,7 @@ router
     if(!validationInt.ok)  return res.status(400).send(resp.error(validationInt.message))
 
     try{
-        const result = await commentsController.delete(id);
+        const result = await postLikesController.delete(id);
         return res.send(resp.data(result))
     }catch(e){
         return res.status(500).send(resp.error(e.message))
