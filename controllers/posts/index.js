@@ -1,4 +1,4 @@
-const { Post } = require('../../models');
+const { Post, Comment } = require('../../models');
 const methods = {}
 
 
@@ -9,7 +9,15 @@ methods.getAll = async function(){
 }
 
 methods.getOne = async function(id){
-    const result = Post.findByPk(id);
+    const result = Post.findOne({
+        where: {
+            id
+        },
+        include: [{
+            model: Comment,
+            require: false
+        }]
+    });
     return result;
 }
 

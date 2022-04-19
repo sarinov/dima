@@ -31,6 +31,7 @@ router
     }
 })
 
+
 .post('/', async (req, res) => {
     const {content, postId, userId, time} = {...req.body, ...req.user}
 
