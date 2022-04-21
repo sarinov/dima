@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      toID: {
+      toId: {
         type: Sequelize.INTEGER
       },
       fromId: {
