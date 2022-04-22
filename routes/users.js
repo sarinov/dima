@@ -31,6 +31,20 @@ router
     }
 })
 
+.get('/messages/:firstId/:secondId', async (req, res) => {
+    const {firstId, secondId} = req.params;
+    const validation = validateInt({firstId, secondId})
+    if(!validation.ok)  return res.status(400).send(resp.error(validation.message))
+
+    try{
+        const result = await usersController.messagesList(firstId, secondId);
+        if(!result) return res.status(400).send(resp.error("Comment doesn`t exist!"))
+        return res.send(resp.data(result))
+    }catch(e){
+        return res.status(500).send(resp.error(e.message))
+    }
+})
+
 .post('/', async (req, res) => {
     const {name, surname, email, phone, age, role} = {...req.body, ...req.user}
 

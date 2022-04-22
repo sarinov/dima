@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+
+      PrivateMessage.belongsTo(models.Messages, {
+        foreignKey: 'messageId'
+      });
     }
   }
   PrivateMessage.init({

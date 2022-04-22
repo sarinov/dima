@@ -38,7 +38,6 @@ router
 
     try{
         const result = await groupsController.usersList(id);
-        console.log(result[0].dataValues?.userId)
         if(!result) return res.status(400).send(resp.error("Comment doesn`t exist!"))
         return res.send(result)
     }catch(e){

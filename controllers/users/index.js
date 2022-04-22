@@ -1,4 +1,4 @@
-const { User } = require('../../models');
+const { User, PrivateMessage, Messages } = require('../../models');
 const methods = {}
 
 
@@ -32,6 +32,21 @@ methods.delete = async function(id){
     const result = User.destroy({
         where: {id}
     })
+    return result;
+}
+
+methods.messagesList = async function(firstId, secondId){
+    const result = PrivateMessage.findAll({
+        where: {
+            fromId : [firstId,secondId],
+            toId : [secondId,firstId],
+        },
+        include: [{
+            model: Messages,
+            require: false
+        }]
+    });
+
     return result;
 }
 
