@@ -1,9 +1,9 @@
 const { Router } = require("express")
-
+const { verifyToken } = require('../middlewares/auth')
 const router = Router();
 
 
-router.use('/comments', require('./comments'))
+router.use('/comments', verifyToken, require('./comments'))
 
 router.use('/groups', require('./groups'))
 

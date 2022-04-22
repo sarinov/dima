@@ -1,4 +1,4 @@
-const { Group } = require('../../models');
+const { Group, GroupUser, User } = require('../../models');
 const methods = {}
 
 
@@ -40,6 +40,30 @@ methods.delete = async function(id){
     })
     return result;
 }
+
+methods.usersList = async function(id){
+    const result = GroupUser.findAll({
+        where: {
+            groupId : id
+        },
+        include: [{
+            model: User,
+            require: false
+        }]
+    });
+
+    return result;
+}
+
+// methods.usersList = async function(id){
+//     const result = User.findOne({
+//         where: {
+//             groupId : id
+//         }
+//     });
+//
+//     return result;
+// }
 
 
 module.exports = methods;

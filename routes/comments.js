@@ -50,7 +50,7 @@ router
 
 })
 
-.put("/:id", async (req, res) => {
+.put("/:id",  async (req, res) => {
 
     const {id} = req.params;
     const {content, postId, userId, time} = {...req.body, ...req.user}

@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'messageId'
       });
 
-      GroupMessage.belongsTo(models.Groups, {
+      GroupMessage.belongsTo(models.Group, {
         foreignKey: 'messageId'
       });
 

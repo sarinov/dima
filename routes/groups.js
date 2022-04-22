@@ -31,6 +31,20 @@ router
     }
 })
 
+.get('/users/:id', async (req, res) => {
+    const {id} = req.params;
+    const validation = validateInt({id})
+    if(!validation.ok)  return res.status(400).send(resp.error(validation.message))
+
+    try{
+        const result = await groupsController.usersList(id);
+        if(!result) return res.status(400).send(resp.error("Comment doesn`t exist!"))
+        return res.send(result)
+    }catch(e){
+        return res.status(500).send(resp.error(e.message))
+    }
+})
+
 .post('/', async (req, res) => {
     const {title, description, img, viewed, content, userId} = {...req.body, ...req.user}
 

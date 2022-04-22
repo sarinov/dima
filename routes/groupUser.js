@@ -3,7 +3,7 @@ const Response = require('../utils/ApiResponse')
 const resp = new Response();
 const {validateInt, validateString} = require('../utils/validator')
 
-const groupUsersController = require('../controllers/groups')
+const groupUsersController = require('../controllers/groupUsers')
 
 const router = Router()
 

@@ -17,7 +17,7 @@ router
     }
 })
 
-.get('/:id', async (req, res) => {
+.get('/:id',  async (req, res) => {
     const {id} = req.params;
     const validation = validateInt({id})
     if(!validation.ok)  return res.status(400).send(resp.error(validation.message))
