@@ -32,13 +32,13 @@ router
 })
 
 .post('/', async (req, res) => {
-    const {title, description, img, viewed, content, userId} = {...req.body, ...req.user}
+    const {title, description, avatar, time, start, end} = {...req.body, ...req.user}
 
-    const validationStr = validateString({title, description, img, content})
+    const validationStr = validateString({title, description, avatar, time, start, end})
     if(!validationStr.ok)  return res.status(400).send(resp.error(validationStr.message))
 
     try{
-        const result = await postsController.create({title, description, img, viewed, content, userId});
+        const result = await postsController.create({title, description, avatar, time, start, end});
         return res.send(resp.data(result))
     }catch(e){
         return res.status(500).send(resp.error(e.message))
@@ -49,13 +49,13 @@ router
 .put("/:id", async (req, res) => {
 
     const {id} = req.params;
-    const {title, description, img, viewed, content, userId} = {...req.body, ...req.user}
+    const {title, description, avatar, time, start, end} = {...req.body, ...req.user}
 
-    const validationStr = validateString({title, description, img, content})
+    const validationStr = validateString({title, description, avatar, time, start, end})
     if(!validationStr.ok)  return res.status(400).send(resp.error(validationStr.message))
 
     try{
-        const result = await postsController.update(id, {title, description, img, viewed, content, userId});
+        const result = await postsController.update(id, {title, description, avatar, time, start, end});
         return res.send(resp.data(result))
     }catch(e){
         return res.status(500).send(resp.error(e.message))
