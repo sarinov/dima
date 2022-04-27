@@ -4,7 +4,7 @@ const methods = {}
 
 
 methods.getAll = async function(){
-    const result = Post.findAll();
+    const result = await Post.findAll();
     return result;
 }
 

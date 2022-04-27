@@ -2,6 +2,7 @@ const { Router } = require('express')
 const Response = require('../utils/ApiResponse')
 const resp = new Response();
 const {validateInt, validateString, validateEmail} = require('../utils/validator')
+const { verifyToken } = require('../middlewares/auth')
 
 const usersController = require('../controllers/users')
 
@@ -15,6 +16,10 @@ router
     }catch(e){
         return res.status(500).send(resp.error(e.message))
     }
+})
+
+.get('/check', verifyToken, async(req, res) => {
+    res.status(200).send(new Response().data(true));
 })
 
 .get('/:id', async (req, res) => {

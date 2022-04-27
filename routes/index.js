@@ -5,24 +5,21 @@ const router = Router();
 
 router.use('/comments', verifyToken, require('./comments'))
 
-router.use('/groups', require('./groups'))
+.use('/groups', require('./groups'))
 
-router.use('/groupMessages', require('./groupmessages'))
+.use('/groupMessages', require('./groupmessages'))
 
-router.use('/posts', require('./posts'))
+.use('/posts', require('./posts'))
 
-router.use('/groupUsers', require('./groupUser'))
+.use('/groupUsers', require('./groupUser'))
 
-router.use('/messages', require('./messages'))
+.use('/messages', require('./messages'))
 
-router.use('/postLikes', require('./postLikes'))
+.use('/postLikes', require('./postLikes'))
 
-router.use('/users', require('./users'))
+.use('/users', require('./users'))
 
-router.use('/privateMessages', require('./privateMessages'))
-
-
-
+.use('/privateMessages', require('./privateMessages'))
 
 
 module.exports = router;
