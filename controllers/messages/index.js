@@ -1,4 +1,5 @@
-const { Messages } = require('../../models');
+const { Messages, GroupMessage, PrivateMessage, User, Chat} = require('../../models');
+const {Op} = require('sequelize')
 const methods = {}
 
 
@@ -37,6 +38,25 @@ methods.delete = async function(id){
         where: {id}
     })
     return result;
+}
+
+methods.getChatsList = async function(userId){
+    const chats = await Chat.findAll({
+        where:{
+            [Op.or]: [{fromId: userId}, {toId: userId}]
+        }
+    })
+    const user = [];
+    for(chat of chats){
+        if(chat.fromId == userId ){
+            user.push(await User.findByPk(chat.toId))
+        }else{
+            user.push(await User.findByPk(chat.fromId))
+        }
+    }
+
+    return user;
+
 }
 
 

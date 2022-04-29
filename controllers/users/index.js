@@ -64,7 +64,12 @@ methods.registration = async function (name, surname, password, email, phone, ag
     const result = await User.create({
         name, surname, password, email, phone, age, role
     })
-    return result
+    var token = jwt.sign(JSON.parse(JSON.stringify({id: result.id, role: result.role})), config.secret, {expiresIn: 86400 * 30});
+    jwt.verify(token, config.secret, function (err, data) {
+        console.log(err, data);
+    })
+    result.password = null
+    return {success: true, token, user: result};
 }
 
 methods.login = async function (password, email) {

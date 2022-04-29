@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     toId: DataTypes.INTEGER,
     fromId: DataTypes.INTEGER,
     messageId: DataTypes.INTEGER,
+    chatId: DataTypes.INTEGER,
     isRead: DataTypes.BOOLEAN,
     isRecived: DataTypes.BOOLEAN,
     status: DataTypes.STRING

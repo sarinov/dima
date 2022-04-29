@@ -6,7 +6,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
       groupId: {
         type: Sequelize.INTEGER
@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       messageId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
       isRead: {
         type: Sequelize.BOOLEAN

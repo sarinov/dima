@@ -17,6 +17,15 @@ router
     }
 })
 
+
+.get('/chats', async (req, res) => {
+    try{
+        return res.send(resp.data(await messagesController.getChatsList(req.user.userId)))
+    }catch(e){
+        return res.status(500).send(resp.error(e.message))
+    }
+})
+
 .get('/:id', async (req, res) => {
     const {id} = req.params;
     const validation = validateInt({id})

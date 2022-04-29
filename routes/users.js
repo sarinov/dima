@@ -115,7 +115,7 @@ router
     if (!password || typeof password != 'string' || password.length < 5) {
         return res.status(400).send(new Response().error('Incorrect password!'));
     }
-    if (!phone || typeof phone != 'string' || password.length < 5) {
+    if (!phone || typeof phone != 'string' || phone.length < 12) {
         return res.status(400).send(new Response().error('Incorrect phone!'));
     }
     if (!email || typeof email != 'string' || !validateEmail(email)) {

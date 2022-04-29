@@ -13,7 +13,7 @@ router.use('/comments', verifyToken, require('./comments'))
 
 .use('/groupUsers', require('./groupUser'))
 
-.use('/messages', require('./messages'))
+.use('/messages',verifyToken,  require('./messages'))
 
 .use('/postLikes', require('./postLikes'))
 

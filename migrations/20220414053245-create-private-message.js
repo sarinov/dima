@@ -6,13 +6,16 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
       toId: {
         type: Sequelize.INTEGER
       },
       fromId: {
         type: Sequelize.INTEGER
+      },
+      chatId: {
+        type: Sequelize.BIGINT
       },
       messageId: {
         type: Sequelize.INTEGER

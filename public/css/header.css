@@ -3,12 +3,13 @@
     height: 70px;
     display: flex;
     justify-content: space-between;
-    background-color: #ececec;
+    background-color: #010042;
     align-items: center;
+    padding: 0 30px;
 }
 
 .header-logo{
-    color: blue;
+    color: #fff;
     font-size: 24px;
 }
 

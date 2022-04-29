@@ -12,6 +12,14 @@ router
     res.render('pages/login');
 })
 
+.get('/registration', async (req, res) => {
+    res.render('pages/registration');
+})
+
+.get('/chat', async (req, res) => {
+    res.render('pages/chat');
+})
+
 
 
 
