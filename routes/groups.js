@@ -46,16 +46,16 @@ router
 })
 
 .post('/', async (req, res) => {
-    const {title, description, img, viewed, content, userId} = {...req.body, ...req.user}
+    const {title, description, avatar, time, start, end} = {...req.body, ...req.user}
 
-    const validationStr = validateString({title, description, img})
+    const validationStr = validateString({title, description, img, content})
     if(!validationStr.ok)  return res.status(400).send(resp.error(validationStr.message))
 
-    const validationInt = validateInt({viewed, content, userId})
+    const validationInt = validateInt({viewed, userId})
     if(!validationInt.ok)  return res.status(400).send(resp.error(validationInt.message))
 
     try{
-        const result = await groupsController.create({title, description, img, viewed, content, userId});
+        const result = await groupsController.create({title, description, avatar, time, start, end});
         return res.send(resp.data(result))
     }catch(e){
         return res.status(500).send(resp.error(e.message))
@@ -66,7 +66,7 @@ router
 .put("/:id", async (req, res) => {
 
     const {id} = req.params;
-    const {title, description, img, viewed, content, userId} = {...req.body, ...req.user}
+    const {title, description, avatar, time, start, end} = {...req.body, ...req.user}
 
     const validationStr = validateString({title, description, img})
     if(!validationStr.ok)  return res.status(400).send(resp.error(validationStr.message))
@@ -75,7 +75,7 @@ router
     if(!validationInt.ok)  return res.status(400).send(resp.error(validationInt.message))
 
     try{
-        const result = await groupsController.update(id, {title, description, img, viewed, content, userId});
+        const result = await groupsController.update(id, {title, description, avatar, time, start, end});
         return res.send(resp.data(result))
     }catch(e){
         return res.status(500).send(resp.error(e.message))

@@ -24,7 +24,7 @@ app.use(express.static(__dirname + '/public'));
 
 
 app.get('/', async (req, res) => {
-    
+
     console.log(req.body)
     res.send('ok');
 })
@@ -40,7 +40,3 @@ app.use((err, req, res, next) => {
 app.listen(port, ()=> {
     console.log(`Server listen: ${port} port`)
 })
-
-
-
-

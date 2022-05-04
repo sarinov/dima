@@ -11,12 +11,12 @@ function login(){
         data: {email,password},
         crossDomain: true,
         success: (response) =>{
-            console.log(response); 
+            console.log(response);
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('user_data', JSON.stringify(response.data.user))
         },
         error: (response) => {
-           alert(response.responseJSON.error)
+           alert(response.responseJSON)
         }
     })
 }
@@ -36,7 +36,7 @@ function registration(){
         data: {email,password,name,surname,phone,age},
         crossDomain: true,
         success: (response) =>{
-            console.log(response); 
+            console.log(response);
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('user_data', JSON.stringify(response.data.user))
             document.location = '/'
@@ -57,11 +57,10 @@ function checkAuth(){
         headers: {"token": localStorage.getItem('token')},
         crossDomain: true,
         success: (response) =>{
-            // console.log(response); 
+            // console.log(response);
         },
         error: (response) => {
            document.location = '/login'
         }
     })
 }
-
