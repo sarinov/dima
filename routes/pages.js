@@ -8,6 +8,10 @@ router
     const posts = await postController.getAll()
     res.render('pages/index', {posts});})
 
+.get('/create-post', async (req, res) => {
+    res.render('pages/create-post')
+})
+
 .get('/login', async (req, res) => {
     res.render('pages/login');
 })

@@ -7,8 +7,17 @@
 
 <body>
     <%- include('../partials/header'); %>
-   
-    <h2><%= posts[0].title %></h2>
+
+    <% for(var i = posts.length - 1; i >= 0; i--) {%>
+        <div class="post">
+            <h2><%= posts[i].title %></h2>
+            <h2><%= posts[i].description %></h2>
+            <h2><%= posts[i].img %></h2>
+            <h2><%= posts[i].viewed %></h2>
+            <h2><%= posts[i].content %></h2>
+            <h2><%= posts[i].userid %></h2>
+        </div>
+    <%} %>
 
     <%- include('../partials/footer'); %>
 </body>
