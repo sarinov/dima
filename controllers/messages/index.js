@@ -21,6 +21,21 @@ methods.create = async function(data){
     return result;
 }
 
+methods.sendMessage = async function(data, fromId, toId){
+    data.time = new Date(data.time).toISOString().slice(0, 19).replace('T', ' ');
+
+    const message = await Messages.create(data);
+    const chat = await Chat.findOne({
+        where:{
+            [Op.or]: [{fromId: fromId, toId: toId}, {fromId: toId, toId: fromId} ]
+        }
+    })
+    const result = await PrivateMessage.create({
+        fromId, toId, chatId: chat.id, messageId: message.id
+    })
+    return result;
+}
+
 
 methods.update = async function(id, data){
     if(data.time) data.time = new Date(data.time).toISOString().slice(0, 19).replace('T', ' ');

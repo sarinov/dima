@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "postgres",
-    "password": "perm801226",
+    "password": "ggwp",
     "database": "dima",
     "host": "127.0.0.1",
     "port": "5432",

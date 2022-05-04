@@ -9,16 +9,16 @@ function sendPost() {
                  method: "POST",
                  headers: {
                        'Content-Type': 'application/json;charset=utf-8',
+                       'token': localStorage.getItem('token')
                  },
                  body: JSON.stringify({
                      'content': content.value,
                      'img': img.value,
                      'title': title.value,
                      'description': description.value,
-                     'userId': 9,
                      'viewed': 1
                  })
              })
 }
-
+if(submit)
 submit.addEventListener("click",sendPost,false);

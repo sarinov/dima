@@ -1,3 +1,4 @@
+let openedChatUserId = null;
 (function(){
 
     var chat = {
@@ -29,6 +30,8 @@
       render: function() {
         this.scrollToBottom();
         if (this.messageToSend.trim() !== '') {
+          console.log(this.messageToSend, openedChatUserId)
+          this.sendMessage(this.messageToSend, openedChatUserId)
           var template = Handlebars.compile( $("#message-template").html());
           var context = {
             messageOutput: this.messageToSend,
@@ -40,30 +43,29 @@
           this.$textarea.val('');
 
           // responses
-          var templateResponse = Handlebars.compile( $("#message-response-template").html());
-          var contextResponse = {
-            response: this.getRandomItem(this.messageResponses),
-            time: this.getCurrentTime()
-          };
+          // var templateResponse = Handlebars.compile( $("#message-response-template").html());
+          // var contextResponse = {
+          //   response: this.getRandomItem(this.messageResponses),
+          //   time: this.getCurrentTime()
+          // };
 
-          setTimeout(function() {
-            this.$chatHistoryList.append(templateResponse(contextResponse));
-            this.scrollToBottom();
-          }.bind(this), 1500);
+          // setTimeout(function() {
+          //   this.$chatHistoryList.append(templateResponse(contextResponse));
+          //   this.scrollToBottom();
+          // }.bind(this), 1500);
 
         }
 
       },
 
       getChats: function() {
-        console.log(12312)
         $.ajax({
             method: 'GET',
             url: 'http://localhost:5001/api/messages/chats',
             headers: {"token": localStorage.getItem('token')},
             crossDomain: true,
             success: (response) =>{
-                console.log(response);
+                // console.log(response);
                 this.renderChats(response.data)
             },
             error: (response) => {
@@ -72,14 +74,37 @@
         })
       },
 
+
+      sendMessage: function(content, userId){
+        $.ajax({
+          method: 'POST',
+          url: 'http://localhost:5001/api/messages/sendMessage',
+          data: {
+            content,
+            type: 'text',
+            time: new Date(),
+            toId: userId
+          },
+          headers: {"token": localStorage.getItem('token')},
+          crossDomain: true,
+          success: (response) =>{
+              console.log(response);
+          },
+          error: (response) => {
+             alert(response.responseJSON.error)
+          }
+      })
+      },
+
+
       renderChats: function(users){
           const chats = $('.list')
         //   chats.clear()
             for(let i of users){
-                chats.append(' <li class="clearfix">'+
+                chats.append(` <li onclick="renderChat('${i.name + '' + i.surname}', ${i.id})" class="clearfix">` +
                 '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />'+
                 '<div class="about">' +
-                  `<div class="name">${i.name}</div>`+
+                  `<div class="name">${i.name} ${i.surname} </div>`+
                   '<div class="status">'+
                    '<i class="fa fa-circle online"></i> online'+
                   '</div>'+
@@ -133,5 +158,15 @@
 
 
 
+   
 
   })();
+
+  const renderChat = function(name, id){
+    $('.chat-message').show();
+    console.log(name)
+    const chat_with = $('.chat-with');
+    chat_with.html('')
+    openedChatUserId = id;
+    chat_with.append(`${name}, ${id}`)
+}

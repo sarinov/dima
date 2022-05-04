@@ -26,6 +26,16 @@ router
     }
 })
 
+.post('/sendMessage', async (req, res) => {
+    try{
+        const {content, type, time, toId} = {...req.body, ...req.user}
+
+        return res.send(resp.data(await messagesController.sendMessage({content, type, time},req.user.userId,toId)))
+    }catch(e){
+        return res.status(500).send(resp.error(e.message))
+    }
+})
+
 .get('/:id', async (req, res) => {
     const {id} = req.params;
     const validation = validateInt({id})
