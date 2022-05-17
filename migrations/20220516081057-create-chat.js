@@ -6,12 +6,12 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.BIGINT
-      },
-      toId: {
         type: Sequelize.INTEGER
       },
-      fromId: {
+      firstId: {
+        type: Sequelize.INTEGER
+      },
+      secondId: {
         type: Sequelize.INTEGER
       }
     });

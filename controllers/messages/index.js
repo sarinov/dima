@@ -58,20 +58,36 @@ methods.delete = async function(id){
 methods.getChatsList = async function(userId){
     const chats = await Chat.findAll({
         where:{
-            [Op.or]: [{fromId: userId}, {toId: userId}]
+            [Op.or]: [{firstId: userId}, {secondId: userId}]
         }
     })
-    const user = [];
+    let user = [];
     for(chat of chats){
-        if(chat.fromId == userId ){
-            user.push(await User.findByPk(chat.toId))
+        if(chat.firstId == userId ){
+            user.push(await User.findByPk(chat.secondId))
         }else{
-            user.push(await User.findByPk(chat.fromId))
+            user.push(await User.findByPk(chat.firstId))
         }
     }
 
+    console.log(user)
+
     return user;
 
+}
+
+methods.getChatMessages = async function(chatId){
+    const result = PrivateMessage.findAll({
+        where: {
+            chatId
+        },
+        include: [{
+            model: Messages,
+            require: false
+        }]
+    });
+
+    return result;
 }
 
 
