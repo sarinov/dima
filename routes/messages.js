@@ -17,6 +17,15 @@ router
     }
 })
 
+.get('/chatMessages/:chatId', async (req, res) => {
+    const {chatId} = req.params;
+    try{
+        return res.send(resp.data(await messagesController.getChatMessages(chatId)))
+    }catch(e){
+        return res.status(500).send(resp.error(e.message))
+    }
+})
+
 
 .get('/chats', async (req, res) => {
     try{

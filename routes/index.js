@@ -3,9 +3,13 @@ const { verifyToken } = require('../middlewares/auth')
 const router = Router();
 
 
-router.use('/comments', verifyToken, require('./comments'))
+router
+
+.use('/comments', verifyToken, require('./comments'))
 
 .use('/groups', require('./groups'))
+
+.use('/chat', require('./chat'))
 
 .use('/groupMessages', require('./groupmessages'))
 
@@ -13,7 +17,7 @@ router.use('/comments', verifyToken, require('./comments'))
 
 .use('/groupUsers', require('./groupUser'))
 
-.use('/messages',verifyToken,  require('./messages'))
+.use('/messages', verifyToken,  require('./messages'))
 
 .use('/postLikes', require('./postLikes'))
 

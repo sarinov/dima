@@ -32,16 +32,16 @@ router
 })
 
 .post('/', async (req, res) => {
-    const {toId, fromId, messageId, isRead, isRecived, status} = {...req.body, ...req.user}
+    const {toId, fromId, chatId, messageId, isRead, isRecived, status} = {...req.body, ...req.user}
 
     const validationStr = validateString({status})
     if(!validationStr.ok)  return res.status(400).send(resp.error(validationStr.message))
 
-    const validationInt = validateInt({toId, fromId, messageId})
+    const validationInt = validateInt({toId, chatId, fromId, messageId})
     if(!validationInt.ok)  return res.status(400).send(resp.error(validationInt.message))
 
     try{
-        const result = await privateMessagesController.create({toId, fromId, messageId, isRead, isRecived, status});
+        const result = await privateMessagesController.create({toId, fromId, chatId, messageId, isRead, isRecived, status});
         return res.send(resp.data(result))
     }catch(e){
         return res.status(500).send(resp.error(e.message))
@@ -52,16 +52,16 @@ router
 .put("/:id", async (req, res) => {
 
     const {id} = req.params;
-    const {toId, fromId, messageId, isRead, isRecived, status} = {...req.body, ...req.user}
+    const {toId, fromId, messageId, chatId, isRead, isRecived, status} = {...req.body, ...req.user}
 
     const validationStr = validateString({status})
     if(!validationStr.ok)  return res.status(400).send(resp.error(validationStr.message))
 
-    const validationInt = validateInt({toId, fromId, messageId})
+    const validationInt = validateInt({toId, chatId, fromId, messageId})
     if(!validationInt.ok)  return res.status(400).send(resp.error(validationInt.message))
 
     try{
-        const result = await privateMessagesController.update(id, {toId, fromId, messageId, isRead, isRecived, status});
+        const result = await privateMessagesController.update(id, {toId, chatId, fromId, messageId, isRead, isRecived, status});
         return res.send(resp.data(result))
     }catch(e){
         return res.status(500).send(resp.error(e.message))

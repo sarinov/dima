@@ -11,12 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      
     }
   }
   Chat.init({
-    toId: DataTypes.INTEGER,
-    fromId: DataTypes.INTEGER
+    firstId: DataTypes.INTEGER,
+    secondId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Chat',

@@ -65,7 +65,7 @@ let openedChatUserId = null;
             headers: {"token": localStorage.getItem('token')},
             crossDomain: true,
             success: (response) =>{
-                // console.log(response);
+                console.log(response.data.User);
                 this.renderChats(response.data)
             },
             error: (response) => {
@@ -158,7 +158,7 @@ let openedChatUserId = null;
 
 
 
-   
+
 
   })();
 
