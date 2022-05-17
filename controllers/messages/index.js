@@ -58,15 +58,15 @@ methods.delete = async function(id){
 methods.getChatsList = async function(userId){
     const chats = await Chat.findAll({
         where:{
-            [Op.or]: [{firstId: userId}, {secondId: userId}]
+            [Op.or]: [{fromId: userId}, {toId: userId}]
         }
     })
     let user = [];
     for(chat of chats){
-        if(chat.firstId == userId ){
-            user.push(await User.findByPk(chat.secondId))
+        if(chat.toId == userId ){
+            user.push({user: await User.findByPk(chat.fromId), chatId: chat.id})
         }else{
-            user.push(await User.findByPk(chat.firstId))
+            user.push({user: await User.findByPk(chat.toId), chatId: chat.id})
         }
     }
 

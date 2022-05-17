@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Chat.init({
-    firstId: DataTypes.INTEGER,
-    secondId: DataTypes.INTEGER
+    fromId: DataTypes.INTEGER,
+    toId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Chat',

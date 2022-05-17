@@ -1,4 +1,11 @@
 let openedChatUserId = null;
+let openedChatUserName = null;
+let openedChatUserChatId = null;
+
+let chatHistoryGlobal = $('.chat-history');
+
+let chatHistoryListGlobal =  chatHistoryGlobal.find('ul');
+
 (function(){
 
     var chat = {
@@ -101,10 +108,10 @@ let openedChatUserId = null;
           const chats = $('.list')
         //   chats.clear()
             for(let i of users){
-                chats.append(` <li onclick="renderChat('${i.name + '' + i.surname}', ${i.id})" class="clearfix">` +
+                chats.append(` <li onclick="renderChat('${i.user.name + '' + i.user.surname}', ${i.chatId}, ${i.user.id})" class="clearfix">` +
                 '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />'+
                 '<div class="about">' +
-                  `<div class="name">${i.name} ${i.surname} </div>`+
+                  `<div class="name">${i.user.name} ${i.user.surname} </div>`+
                   '<div class="status">'+
                    '<i class="fa fa-circle online"></i> online'+
                   '</div>'+
@@ -124,7 +131,7 @@ let openedChatUserId = null;
           }
       },
       scrollToBottom: function() {
-         this.$chatHistory.scrollTop(this.$chatHistory[0].scrollHeight);
+        //  this.$chatHistory.scrollTop(this.$chatHistory[0].scrollHeight);
       },
       getCurrentTime: function() {
         return new Date().toLocaleTimeString().
@@ -132,7 +139,10 @@ let openedChatUserId = null;
       },
       getRandomItem: function(arr) {
         return arr[Math.floor(Math.random()*arr.length)];
-      }
+      },
+
+
+     
 
     };
 
@@ -162,11 +172,52 @@ let openedChatUserId = null;
 
   })();
 
-  const renderChat = function(name, id){
+  const renderChatMessages = function (messages) {
+    chatHistoryListGlobal.html('')
+    let user_data = localStorage.getItem('user_data')
+    let current_id = JSON.parse(user_data).id
+    for(let message of messages) {
+      var context = {
+        messageOutput: message.Message.content,
+        time: message.Message.time
+      };
+
+      if(message.fromId === current_id){
+        var template = Handlebars.compile( $("#message-template").html());
+        chatHistoryListGlobal.append(template(context));
+      }else{
+        var templateResponse = Handlebars.compile( $("#message-response-template").html());
+        chatHistoryListGlobal.append(templateResponse(context));
+      }
+
+    }
+  
+  }
+
+  const getChatMessages =  function() {
+    $.ajax({
+      method: 'GET',
+      url: 'http://localhost:5001/api/messages/chatMessages/' + openedChatUserChatId,
+      headers: {"token": localStorage.getItem('token')},
+      crossDomain: true,
+      success: (response) =>{
+          console.log(response);
+          renderChatMessages(response.data)
+      },
+      error: (response) => {
+         alert(response.responseJSON.error)
+      }
+  })
+  }
+
+  const renderChat = function(name, chatId, userId){
     $('.chat-message').show();
     console.log(name)
     const chat_with = $('.chat-with');
     chat_with.html('')
-    openedChatUserId = id;
-    chat_with.append(`${name}, ${id}`)
+    openedChatUserId = userId;
+    openedChatUserName = name;
+    openedChatUserChatId = chatId;
+    getChatMessages()
+    chat_with.append(`${name}, ${userId}`)
 }
