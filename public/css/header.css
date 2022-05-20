@@ -11,6 +11,7 @@
 .header-logo{
     color: #fff;
     font-size: 24px;
+    cursor: pointer;
 }
 
 .header-menu ul{
@@ -20,4 +21,6 @@
 
 .header-menu li{
     margin-left: 20px;
+    color:white;
+    cursor: pointer;
 }

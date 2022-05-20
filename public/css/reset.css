@@ -52,7 +52,11 @@ body {
 	background: #fefefe;
 	font: 14px/20px "Lato", Arial, sans-serif;
 	/* padding: 40px 0; */
-	color: black;
+}
+
+button {
+    padding: 0;
+    border: 0;
 }
 
 .container {

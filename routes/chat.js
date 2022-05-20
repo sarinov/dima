@@ -33,13 +33,13 @@ router
 
 
 .post('/', async (req, res) => {
-    const {firstId, secondId} = {...req.body, ...req.user}
+    const {fromId, toId} = {...req.body, ...req.user}
 
-    const validationInt = validateInt({firstId, secondId})
+    const validationInt = validateInt({fromId, toId})
     if(!validationInt.ok)  return res.status(400).send(resp.error(validationInt.message))
 
     try{
-        const result = await chatController.create({firstId, secondId});
+        const result = await chatController.create({fromId, toId});
         return res.send(resp.data(result))
     }catch(e){
         return res.status(500).send(resp.error(e.message))
@@ -50,13 +50,13 @@ router
 .put("/:id",  async (req, res) => {
 
     const {id} = req.params;
-    const {firstId, secondId} = {...req.body, ...req.user}
+    const {fromId, toId} = {...req.body, ...req.user}
 
     const validationInt = validateInt({firstId, secondId})
     if(!validationInt.ok)  return res.status(400).send(resp.error(validationInt.message))
 
     try{
-        const result = await chatController.update(id, {firstId, secondId});
+        const result = await chatController.update(id, {fromId, toId});
         return res.send(resp.data(result))
     }catch(e){
         return res.status(500).send(resp.error(e.message))
