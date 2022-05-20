@@ -38,8 +38,9 @@ router
 .post('/sendMessage', async (req, res) => {
     try{
         const {content, type, time, toId} = {...req.body, ...req.user}
-
-        return res.send(resp.data(await messagesController.sendMessage({content, type, time},req.user.userId,toId)))
+        let chatId = await messagesController.sendMessage({content, type, time},req.user.userId,toId)
+        req.app.get('io').to(`chat_${chatId}`).emit("sendMessage", {content, time});
+        return res.send(resp.data('Success'))
     }catch(e){
         return res.status(500).send(resp.error(e.message))
     }

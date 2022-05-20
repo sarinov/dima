@@ -6,6 +6,7 @@ const pages = require(`./routes/pages`);
 const port = 5001;
 const Response = require('./utils/ApiResponse')
 const cors = require('cors')
+const {getChatsList} = require('./controllers/messages')
 
 const socketOptions = {
     allowEIO3: true,
@@ -55,14 +56,22 @@ const server = app.listen(port, ()=> {
 
 const io = require("socket.io")(server, socketOptions);
 
+app.set('io', io);
 
-io.on("connection", (socket) => {   
-    console.log(socket)
+io.on("connection", async (socket) => {   
+    console.log(socket.handshake.query.id)
+    const {id} = socket.handshake.query;
+    const chats = await getChatsList(id)
+
+
+    for (const chat of chats) {
+        socket.join(`chat_${chat.chatId}`);
+    }
     // send a message to the client
-    // socket.emit("hello from server", 1, "2", { 3: Buffer.from([4]) });
+     socket.emit("chat message", {data: 'hello', asd: []});
   
     // // receive a message from the client
     // socket.on("hello from client", (...args) => {
     //   // ...
     // });
-  });
+});

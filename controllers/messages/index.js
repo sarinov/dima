@@ -33,7 +33,7 @@ methods.sendMessage = async function(data, fromId, toId){
     const result = await PrivateMessage.create({
         fromId, toId, chatId: chat.id, messageId: message.id
     })
-    return result;
+    return chat.id;
 }
 
 

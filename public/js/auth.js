@@ -7,7 +7,7 @@ function login(){
 
     $.ajax({
         method: 'POST',
-        url: 'http://localhost:5001/api/users/login',
+        url: 'http://192.168.0.155:5001/api/users/login',
         data: {email,password},
         crossDomain: true,
         success: (response) =>{
@@ -33,7 +33,7 @@ function registration(){
 
     $.ajax({
         method: 'POST',
-        url: 'http://localhost:5001/api/users/registration',
+        url: 'http://192.168.0.155:5001/api/users/registration',
         data: {email,password,name,surname,phone,age},
         crossDomain: true,
         success: (response) =>{

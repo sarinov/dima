@@ -66,9 +66,12 @@ let chatHistoryListGlobal =  chatHistoryGlobal.find('ul');
       },
 
       getChats: function() {
+        const url = document.location.href;
+    // console.log(url)
+        if(!url.includes('chat')) return
         $.ajax({
             method: 'GET',
-            url: 'http://localhost:5001/api/messages/chats',
+            url: 'http://192.168.0.155:5001/api/messages/chats',
             headers: {"token": localStorage.getItem('token')},
             crossDomain: true,
             success: (response) =>{
@@ -85,7 +88,7 @@ let chatHistoryListGlobal =  chatHistoryGlobal.find('ul');
       sendMessage: function(content, userId){
         $.ajax({
           method: 'POST',
-          url: 'http://localhost:5001/api/messages/sendMessage',
+          url: 'http://192.168.0.155:5001/api/messages/sendMessage',
           data: {
             content,
             type: 'text',
@@ -197,7 +200,7 @@ let chatHistoryListGlobal =  chatHistoryGlobal.find('ul');
   const getChatMessages =  function() {
     $.ajax({
       method: 'GET',
-      url: 'http://localhost:5001/api/messages/chatMessages/' + openedChatUserChatId,
+      url: 'http://192.168.0.155:5001/api/messages/chatMessages/' + openedChatUserChatId,
       headers: {"token": localStorage.getItem('token')},
       crossDomain: true,
       success: (response) =>{
