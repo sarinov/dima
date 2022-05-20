@@ -1,18 +1,13 @@
-body {
-  color: black;
-  margin: 0;
-  background: #F7F7F7;
-  height: 100vh;
-  font-family: 'Open Sans', sans-serif;
-}
+
 .form-wrap {
   width: 550px;
   border-radius: 20px;
   display: flex;
   justify-content: center;
+  font-family: 'Open Sans', sans-serif;
 }
 .form-wrap *{transition: .1s linear}
-form {
+.form {
   background: white;
   float: left;
   width: calc(100% - 240px);
@@ -20,36 +15,21 @@ form {
   border-radius: 0 20px 20px 0;
   color: #7b7b7b;
 }
-.form-wrap:after, form div:after {
+.form-wrap:after, .form div:after {
   content: "";
   display: table;
   clear: both;
 }
-form div {
+.form div {
   margin-bottom: 15px;
   position: relative;
-}
-h1 {
-  font-size: 24px;
-  font-weight: 400;
-  position: relative;
-  margin-top: 50px;
-}
-h1:after {
-  content: "\f138";
-  font-size: 40px;
-  font-family: FontAwesome;
-  position: absolute;
-  top: 50px;
-  left: 50%;
-  transform: translateX(-50%);
 }
 .span-label {
   display: block;
   font-size: 14px;
   margin-bottom: 8px;
 }
-input[type="text"] {
+.input_data {
   width: 100%;
   padding: 10px 15px;
   border-width: 0;
@@ -57,7 +37,7 @@ input[type="text"] {
   outline: none;
   margin: 0;
 }
-input[type="text"]:focus {
+.input_data:focus {
   box-shadow: inset 0 0 0 2px rgba(0,0,0,.2);
 }
 .button-create {

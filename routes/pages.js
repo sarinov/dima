@@ -24,6 +24,10 @@ router
     res.render('pages/chat');
 })
 
+.get('/profile', async (req, res) => {
+    res.render('pages/profile');
+})
+
 
 
 
