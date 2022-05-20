@@ -70,7 +70,6 @@ methods.getChatsList = async function(userId){
         }
     }
 
-    console.log(user)
 
     return user;
 

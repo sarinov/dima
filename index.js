@@ -7,6 +7,16 @@ const port = 5001;
 const Response = require('./utils/ApiResponse')
 const cors = require('cors')
 
+const socketOptions = {
+    allowEIO3: true,
+    cors: {
+        origin: [ '*', 'http://localhost:5001' ],
+        methods: [ 'GET', 'POST', 'OPTIONS' ],
+        allowedHeaders: 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range',
+    }
+};
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true
@@ -37,6 +47,22 @@ app.use((err, req, res, next) => {
     }));
 })
 
-app.listen(port, ()=> {
+const server = app.listen(port, ()=> {
     console.log(`Server listen: ${port} port`)
 })
+
+
+
+const io = require("socket.io")(server, socketOptions);
+
+
+io.on("connection", (socket) => {   
+    console.log(socket)
+    // send a message to the client
+    // socket.emit("hello from server", 1, "2", { 3: Buffer.from([4]) });
+  
+    // // receive a message from the client
+    // socket.on("hello from client", (...args) => {
+    //   // ...
+    // });
+  });
