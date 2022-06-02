@@ -6,6 +6,9 @@ let chatHistoryGlobal = $('.chat-history');
 
 let chatHistoryListGlobal =  chatHistoryGlobal.find('ul');
 
+let getChatsGlobal = function(){};
+let renderChatsGlobal = function(){};
+
 (function(){
 
     var chat = {
@@ -23,6 +26,8 @@ let chatHistoryListGlobal =  chatHistoryGlobal.find('ul');
         this.bindEvents();
         this.render();
         this.getChats();
+        getChatsGlobal = this.getChats;
+        renderChatsGlobal = this.renderChats;
       },
       cacheDOM: function() {
         this.$chatHistory = $('.chat-history');
@@ -71,12 +76,12 @@ let chatHistoryListGlobal =  chatHistoryGlobal.find('ul');
         if(!url.includes('chat')) return
         $.ajax({
             method: 'GET',
-            url: 'http://192.168.0.155:5001/api/messages/chats',
+            url: 'http://192.168.0.156:5001/api/messages/chats',
             headers: {"token": localStorage.getItem('token')},
             crossDomain: true,
             success: (response) =>{
                 console.log(response.data.User);
-                this.renderChats(response.data)
+                renderChatsGlobal(response.data)
             },
             error: (response) => {
                document.location = '/login'
@@ -88,7 +93,7 @@ let chatHistoryListGlobal =  chatHistoryGlobal.find('ul');
       sendMessage: function(content, userId){
         $.ajax({
           method: 'POST',
-          url: 'http://192.168.0.155:5001/api/messages/sendMessage',
+          url: 'http://192.168.0.156:5001/api/messages/sendMessage',
           data: {
             content,
             type: 'text',
@@ -109,7 +114,7 @@ let chatHistoryListGlobal =  chatHistoryGlobal.find('ul');
 
       renderChats: function(users){
           const chats = $('.list')
-        //   chats.clear()
+          chats.html('')
             for(let i of users){
                 chats.append(` <li onclick="renderChat('${i.user.name + '' + i.user.surname}', ${i.chatId}, ${i.user.id})" class="clearfix">` +
                 '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />'+
@@ -134,7 +139,8 @@ let chatHistoryListGlobal =  chatHistoryGlobal.find('ul');
           }
       },
       scrollToBottom: function() {
-        //  this.$chatHistory.scrollTop(this.$chatHistory[0].scrollHeight);
+        console.log('scrollToBottom')
+        $(".chat-history").scrollTop($(".chat-history")[0].scrollHeight);
       },
       getCurrentTime: function() {
         return new Date().toLocaleTimeString().
@@ -150,27 +156,6 @@ let chatHistoryListGlobal =  chatHistoryGlobal.find('ul');
     };
 
     chat.init();
-
-    var searchFilter = {
-      options: { valueNames: ['name'] },
-      init: function() {
-        var userList = new List('people-list', this.options);
-        var noItems = $('<li id="no-items-found">No items found</li>');
-
-        userList.on('updated', function(list) {
-          if (list.matchingItems.length === 0) {
-            $(list.list).append(noItems);
-          } else {
-            noItems.detach();
-          }
-        });
-      }
-    };
-
-    searchFilter.init();
-
-
-
 
 
   })();
@@ -194,18 +179,20 @@ let chatHistoryListGlobal =  chatHistoryGlobal.find('ul');
       }
 
     }
-  
+    $(".chat-history").scrollTop($(".chat-history")[0].scrollHeight);
+
   }
 
   const getChatMessages =  function() {
     $.ajax({
       method: 'GET',
-      url: 'http://192.168.0.155:5001/api/messages/chatMessages/' + openedChatUserChatId,
+      url: 'http://192.168.0.156:5001/api/messages/chatMessages/' + openedChatUserChatId,
       headers: {"token": localStorage.getItem('token')},
       crossDomain: true,
       success: (response) =>{
           console.log(response);
           renderChatMessages(response.data)
+
       },
       error: (response) => {
          alert(response.responseJSON.error)
@@ -223,4 +210,38 @@ let chatHistoryListGlobal =  chatHistoryGlobal.find('ul');
     openedChatUserChatId = chatId;
     getChatMessages()
     chat_with.append(`${name}, ${userId}`)
+
+   
+}
+
+const searchUser = function (e) {
+  if(!e.target.value) {
+    getChatsGlobal()
+    return
+  }
+  $.ajax({
+    method: 'GET',
+    url: 'http://192.168.0.156:5001/api/users/find?query=' + e.target.value,
+    headers: {"token": localStorage.getItem('token')},
+    crossDomain: true,
+    success: (response) =>{
+        console.log(response);
+        const {data} = response
+        const chats = $('.list')
+          chats.html('')
+        for(let i of data){
+          chats.append(` <li class="clearfix" onclick="createChat(${i.id})">` +
+          '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />'+
+          '<div class="about">' +
+            `<div class="name">${i.name} ${i.surname} </div>`+
+            '<div class="status">'+
+             '<i class="fa fa-circle online"></i> online'+
+            '</div>'+
+          '</div> </li>')
+      }
+    },
+    error: (response) => {
+       alert(response.responseJSON.error)
+    }
+})
 }

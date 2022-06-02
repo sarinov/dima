@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
 const methods = {}
 
-
+const { Op } = require("sequelize");
+const sequelize = require('sequelize')
 
 methods.getAll = async function(){
     const result = User.findAll();
@@ -13,6 +14,22 @@ methods.getAll = async function(){
 
 methods.getOne = async function(id){
     const result = User.findByPk(id);
+    return result;
+}
+
+methods.findeUser = async function(query){
+    query = query.toLowerCase();
+    const result = User.findAll({
+        limit: 10,
+        where: {
+            [Op.or]: [
+                {email: sequelize.where(sequelize.fn('LOWER', sequelize.col('email')), 'LIKE', '%' + query + '%')},
+                {name: sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', '%' + query + '%')},
+                {surname: sequelize.where(sequelize.fn('LOWER', sequelize.col('surname')), 'LIKE', '%' + query + '%')},
+            ]
+        }
+    }
+    );
     return result;
 }
 

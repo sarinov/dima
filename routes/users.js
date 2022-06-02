@@ -22,6 +22,18 @@ router
     res.status(200).send(new Response().data(true));
 })
 
+
+.get('/find', async (req, res) => {
+    const {query} = {...req.query, ...req.body};
+    console.log('sdfsdf')
+    try {
+        const result = await usersController.findeUser(query);
+        res.status(201).send(new Response().data(result));
+    } catch (err) {
+        res.status(500).send(new Response().error(err.message || err));
+    }
+})
+
 .get('/:id', async (req, res) => {
     const {id} = req.params;
     const validation = validateInt({id})
@@ -146,6 +158,8 @@ router
         res.status(500).send(new Response().error(err.message || err));
     }
 })
+
+
 
 
 module.exports = router;
