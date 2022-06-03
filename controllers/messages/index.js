@@ -31,7 +31,7 @@ methods.sendMessage = async function(data, fromId, toId){
         }
     })
     const result = await PrivateMessage.create({
-        fromId, toId, chatId: chat.id, messageId: message.id
+        fromId, toId, chatId: chat.id, messageId: message.id, isRead: false
     })
     return chat.id;
 }
@@ -63,10 +63,12 @@ methods.getChatsList = async function(userId){
     })
     let user = [];
     for(chat of chats){
+        const data = await PrivateMessage.findAll({where: {toId:userId, chatId: chat.id, isRead: {[Op.not]: true}}})
+        const isRead = data.length;
         if(chat.toId == userId ){
-            user.push({user: await User.findByPk(chat.fromId), chatId: chat.id})
+            user.push({user: await User.findByPk(chat.fromId), chatId: chat.id, isRead})
         }else{
-            user.push({user: await User.findByPk(chat.toId), chatId: chat.id})
+            user.push({user: await User.findByPk(chat.toId), chatId: chat.id, isRead })
         }
     }
 
@@ -76,6 +78,17 @@ methods.getChatsList = async function(userId){
 }
 
 methods.getChatMessages = async function(chatId){
+
+    PrivateMessage.update({
+        isRead: true
+    },
+    {
+        where: {
+            chatId
+        }
+    }
+    )
+
     const result = PrivateMessage.findAll({
         where: {
             chatId

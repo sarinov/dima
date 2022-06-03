@@ -12,6 +12,8 @@ router
 .post('/createChat', async (req, res) => {
     const {fromId, toId} = {...req.body, ...req.user}
     try{
+        req.app.get('io').to(`user_${toId}`).emit("createdChat", {});
+
         return res.send(resp.data(await chatController.createChat(fromId, toId)))
     }catch(e){
         return res.status(500).send(resp.error(e.message))

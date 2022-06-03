@@ -76,7 +76,7 @@ let renderChatsGlobal = function(){};
         if(!url.includes('chat')) return
         $.ajax({
             method: 'GET',
-            url: 'http://192.168.1.66:5001/api/messages/chats',
+            url: 'http://192.168.0.156:5001/api/messages/chats',
             headers: {"token": localStorage.getItem('token')},
             crossDomain: true,
             success: (response) =>{
@@ -92,7 +92,7 @@ let renderChatsGlobal = function(){};
       sendMessage: function(content, userId){
         $.ajax({
           method: 'POST',
-          url: 'http://192.168.1.66:5001/api/messages/sendMessage',
+          url: 'http://192.168.0.156:5001/api/messages/sendMessage',
           data: {
             content,
             type: 'text',
@@ -115,12 +115,13 @@ let renderChatsGlobal = function(){};
           const chats = $('.list')
           chats.html('')
             for(let i of users){
-                chats.append(` <li onclick="renderChat('${i.user.name + '' + i.user.surname}', ${i.chatId}, ${i.user.id})" class="clearfix">` +
+                chats.append(` <li onclick="renderChat('${i.user.name + '' + i.user.surname}', ${i.chatId}, ${i.user.id})" id="${i.chatId}" class="clearfix ${i.isRead ? 'readible' : ''}">` +
                 '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />'+
                 '<div class="about">' +
                   `<div class="name">${i.user.name} ${i.user.surname} </div>`+
                   '<div class="status">'+
                    '<i class="fa fa-circle online"></i> online'+
+                   `${i.isRead}` +
                   '</div>'+
                 '</div> </li>')
             }
@@ -184,7 +185,7 @@ let renderChatsGlobal = function(){};
   const getChatMessages =  function() {
     $.ajax({
       method: 'GET',
-      url: 'http://192.168.1.66:5001/api/messages/chatMessages/' + openedChatUserChatId,
+      url: 'http://192.168.0.156:5001/api/messages/chatMessages/' + openedChatUserChatId,
       headers: {"token": localStorage.getItem('token')},
       crossDomain: true,
       success: (response) =>{
@@ -198,6 +199,7 @@ let renderChatsGlobal = function(){};
   }
 
   const renderChat = function(name, chatId, userId){
+    $(`#${chatId}`).css({ background: "transparent"})
     $('.chat-message').show();
     const chat_with = $('.chat-with');
     chat_with.html('')
@@ -217,7 +219,7 @@ const searchUser = function (e) {
   }
   $.ajax({
     method: 'GET',
-    url: 'http://192.168.1.66:5001/api/users/find?query=' + e.target.value,
+    url: 'http://192.168.0.156:5001/api/users/find?query=' + e.target.value,
     headers: {"token": localStorage.getItem('token')},
     crossDomain: true,
     success: (response) =>{
@@ -245,7 +247,7 @@ const searchUser = function (e) {
 const createChat =  function(toId, name) {
   $.ajax({
     method: 'POST',
-    url: 'http://192.168.1.66:5001/api/chat/createChat',
+    url: 'http://192.168.0.156:5001/api/chat/createChat',
     headers: {"token": localStorage.getItem('token')},
     data: {
         fromId: JSON.parse(localStorage.getItem('user_data')).id,

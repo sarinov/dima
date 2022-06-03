@@ -63,15 +63,8 @@ io.on("connection", async (socket) => {
     const {id} = socket.handshake.query;
     const chats = await getChatsList(id)
 
-
+    socket.join(`user_${id}`);
     for (const chat of chats) {
         socket.join(`chat_${chat.chatId}`);
     }
-    // send a message to the client
-     socket.emit("chat message", {data: 'hello', asd: []});
-  
-    // // receive a message from the client
-    // socket.on("hello from client", (...args) => {
-    //   // ...
-    // });
 });
