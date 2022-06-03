@@ -1,6 +1,8 @@
 const { Chat } = require('../../models');
 const methods = {}
 
+const { Op } = require("sequelize");
+
 
 
 methods.getAll = async function(){

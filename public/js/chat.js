@@ -76,11 +76,10 @@ let renderChatsGlobal = function(){};
         if(!url.includes('chat')) return
         $.ajax({
             method: 'GET',
-            url: 'http://192.168.0.156:5001/api/messages/chats',
+            url: 'http://192.168.1.66:5001/api/messages/chats',
             headers: {"token": localStorage.getItem('token')},
             crossDomain: true,
             success: (response) =>{
-                console.log(response.data.User);
                 renderChatsGlobal(response.data)
             },
             error: (response) => {
@@ -93,7 +92,7 @@ let renderChatsGlobal = function(){};
       sendMessage: function(content, userId){
         $.ajax({
           method: 'POST',
-          url: 'http://192.168.0.156:5001/api/messages/sendMessage',
+          url: 'http://192.168.1.66:5001/api/messages/sendMessage',
           data: {
             content,
             type: 'text',
@@ -139,7 +138,6 @@ let renderChatsGlobal = function(){};
           }
       },
       scrollToBottom: function() {
-        console.log('scrollToBottom')
         $(".chat-history").scrollTop($(".chat-history")[0].scrollHeight);
       },
       getCurrentTime: function() {
@@ -151,7 +149,7 @@ let renderChatsGlobal = function(){};
       },
 
 
-     
+
 
     };
 
@@ -186,11 +184,10 @@ let renderChatsGlobal = function(){};
   const getChatMessages =  function() {
     $.ajax({
       method: 'GET',
-      url: 'http://192.168.0.156:5001/api/messages/chatMessages/' + openedChatUserChatId,
+      url: 'http://192.168.1.66:5001/api/messages/chatMessages/' + openedChatUserChatId,
       headers: {"token": localStorage.getItem('token')},
       crossDomain: true,
       success: (response) =>{
-          console.log(response);
           renderChatMessages(response.data)
 
       },
@@ -202,7 +199,6 @@ let renderChatsGlobal = function(){};
 
   const renderChat = function(name, chatId, userId){
     $('.chat-message').show();
-    console.log(name)
     const chat_with = $('.chat-with');
     chat_with.html('')
     openedChatUserId = userId;
@@ -211,7 +207,7 @@ let renderChatsGlobal = function(){};
     getChatMessages()
     chat_with.append(`${name}, ${userId}`)
 
-   
+
 }
 
 const searchUser = function (e) {
@@ -221,16 +217,15 @@ const searchUser = function (e) {
   }
   $.ajax({
     method: 'GET',
-    url: 'http://192.168.0.156:5001/api/users/find?query=' + e.target.value,
+    url: 'http://192.168.1.66:5001/api/users/find?query=' + e.target.value,
     headers: {"token": localStorage.getItem('token')},
     crossDomain: true,
     success: (response) =>{
-        console.log(response);
         const {data} = response
         const chats = $('.list')
           chats.html('')
         for(let i of data){
-          chats.append(` <li class="clearfix" onclick="createChat(${i.id})">` +
+          chats.append(` <li class="clearfix" onclick="createChat(${i.id}, '${i.name}')">` +
           '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />'+
           '<div class="about">' +
             `<div class="name">${i.name} ${i.surname} </div>`+
@@ -239,6 +234,26 @@ const searchUser = function (e) {
             '</div>'+
           '</div> </li>')
       }
+    },
+    error: (response) => {
+       alert(response.responseJSON.error)
+    }
+})
+
+}
+
+const createChat =  function(toId, name) {
+  $.ajax({
+    method: 'POST',
+    url: 'http://192.168.1.66:5001/api/chat/createChat',
+    headers: {"token": localStorage.getItem('token')},
+    data: {
+        fromId: JSON.parse(localStorage.getItem('user_data')).id,
+        toId
+    },
+    crossDomain: true,
+    success: (response) =>{
+        renderChat(name, response.data, toId)
     },
     error: (response) => {
        alert(response.responseJSON.error)

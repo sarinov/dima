@@ -9,6 +9,15 @@ const router = Router()
 
 router
 
+.post('/createChat', async (req, res) => {
+    const {fromId, toId} = {...req.body, ...req.user}
+    try{
+        return res.send(resp.data(await chatController.createChat(fromId, toId)))
+    }catch(e){
+        return res.status(500).send(resp.error(e.message))
+    }
+})
+
 .get('/', async (req, res) => {
     try{
         return res.send(resp.data(await chatController.getAll()))
