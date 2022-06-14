@@ -1,7 +1,19 @@
  *, *:before, *:after {
 	 box-sizing: border-box;
 }
- 
+
+.round {
+  display: none;
+  margin-left: 250px;
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 50%;
+  line-height: 1.2em;  /* подробнее про line-height */
+  text-align: center;  /* выравнять текст по середине по горизонтали */
+  background: skyblue;
+  color:RGB(68, 71 , 83);
+}
+
  .chat-container {
 	 /* margin: 40px auto;
 	 width: 80%; */
@@ -41,7 +53,7 @@
 }
 
  .people-list ul li:hover{
-	background-color: #ececec;
+	color: skyblue;
 	 padding-bottom: 20px;
 }
  .people-list img {
@@ -197,7 +209,7 @@
 	 clear: both;
 	 height: 0;
 }
- 
+
 .readible{
-	background-color: red;
+	display: block;
 }
