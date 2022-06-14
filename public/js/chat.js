@@ -77,7 +77,7 @@ let renderChatsGlobal = function(){};
         if(!url.includes('chat')) return
         $.ajax({
             method: 'GET',
-            url: 'http://192.168.1.66:5001/api/messages/chats',
+            url: 'http://192.168.0.156:5001/api/messages/chats',
             headers: {"token": localStorage.getItem('token')},
             crossDomain: true,
             success: (response) =>{
@@ -93,7 +93,7 @@ let renderChatsGlobal = function(){};
       sendMessage: function(content, userId){
         $.ajax({
           method: 'POST',
-          url: 'http://192.168.1.66:5001/api/messages/sendMessage',
+          url: 'http://192.168.0.156:5001/api/messages/sendMessage',
           data: {
             content,
             type: 'text',
@@ -171,7 +171,9 @@ let renderChatsGlobal = function(){};
     for(let message of messages) {
       var context = {
         messageOutput: message.Message.content,
-        time: message.Message.time
+        time: message.Message.time,
+        id_msg: message.Message.id,
+        id: message.id
       };
 
       if(message.fromId === current_id){
@@ -190,7 +192,7 @@ let renderChatsGlobal = function(){};
   const getChatMessages =  function() {
     $.ajax({
       method: 'GET',
-      url: 'http://192.168.1.66:5001/api/messages/chatMessages/' + openedChatUserChatId,
+      url: 'http://192.168.0.156:5001/api/messages/chatMessages/' + openedChatUserChatId,
       headers: {"token": localStorage.getItem('token')},
       crossDomain: true,
       success: (response) =>{
@@ -222,7 +224,7 @@ const searchUser = function (e) {
   }
   $.ajax({
     method: 'GET',
-    url: 'http://192.168.1.66:5001/api/users/find?query=' + e.target.value,
+    url: 'http://192.168.0.156:5001/api/users/find?query=' + e.target.value,
     headers: {"token": localStorage.getItem('token')},
     crossDomain: true,
     success: (response) =>{
@@ -250,7 +252,7 @@ const searchUser = function (e) {
 const createChat =  function(toId, name) {
   $.ajax({
     method: 'POST',
-    url: 'http://192.168.1.66:5001/api/chat/createChat',
+    url: 'http://192.168.0.156:5001/api/chat/createChat',
     headers: {"token": localStorage.getItem('token')},
     data: {
         fromId: JSON.parse(localStorage.getItem('user_data')).id,

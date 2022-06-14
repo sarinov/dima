@@ -87,13 +87,13 @@ router
 .put("/:id", async (req, res) => {
 
     const {id} = req.params;
-    const {content, type, time} = {...req.body, ...req.user}
+    const {content} = {...req.body, ...req.user}
 
-    const validationStr = validateString({content, type, time})
+    const validationStr = validateString({content})
     if(!validationStr.ok)  return res.status(400).send(resp.error(validationStr.message))
 
     try{
-        const result = await messagesController.update(id, {content, type, time});
+        const result = await messagesController.update(id, {content});
         return res.send(resp.data(result))
     }catch(e){
         return res.status(500).send(resp.error(e.message))

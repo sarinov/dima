@@ -21,7 +21,7 @@ methods.create = async function(data){
     return result;
 }
 
-methods.sendMessage = async function(data, fromId, toId){
+methods.sendMessage = async function(data, fromId, toId, status=''){
     data.time = new Date(data.time).toISOString().slice(0, 19).replace('T', ' ');
 
     const message = await Messages.create(data);
@@ -31,7 +31,7 @@ methods.sendMessage = async function(data, fromId, toId){
         }
     })
     const result = await PrivateMessage.create({
-        fromId, toId, chatId: chat.id, messageId: message.id, isRead: false
+        fromId, toId, chatId: chat.id, messageId: message.id, isRead: false, status
     })
     return chat.id;
 }

@@ -7,7 +7,7 @@ function login(){
 
     $.ajax({
         method: 'POST',
-        url: 'http://192.168.1.66:5001/api/users/login',
+        url: 'http://192.168.0.156:5001/api/users/login',
         data: {email,password},
         crossDomain: true,
         success: (response) =>{
@@ -33,7 +33,7 @@ function registration(){
 
     $.ajax({
         method: 'POST',
-        url: 'http://192.168.1.66:5001/api/users/registration',
+        url: 'http://192.168.0.156:5001/api/users/registration',
         data: {email,password,name,surname,phone,age},
         crossDomain: true,
         success: (response) =>{
@@ -54,7 +54,7 @@ function checkAuth(){
     if(url.includes('login') || url.includes('registration')) return
     $.ajax({
         method: 'GET',
-        url: 'http://192.168.1.66:5001/api/users/check',
+        url: 'http://192.168.0.156:5001/api/users/check',
         headers: {"token": localStorage.getItem('token')},
         crossDomain: true,
         success: (response) =>{
