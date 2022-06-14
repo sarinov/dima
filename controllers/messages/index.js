@@ -102,5 +102,21 @@ methods.getChatMessages = async function(chatId){
     return result;
 }
 
+methods.putReadMessages = async function(chatId){
+
+    PrivateMessage.update({
+        isRead: true
+    },
+    {
+        where: {
+            chatId
+        }
+    }
+    )
+
+    return
+}
+
+
 
 module.exports = methods;
