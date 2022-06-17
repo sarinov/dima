@@ -31,6 +31,20 @@ router
     }
 })
 
+.get('/groupsList/:id', async (req, res) => {
+    const {id} = req.params;
+    const validation = validateInt({id})
+    if(!validation.ok)  return res.status(400).send(resp.error(validation.message))
+
+    try{
+        const result = await groupsController.groupList(id);
+        if(!result) return res.status(400).send(resp.error("Comment doesn`t exist!"))
+        return res.send(result)
+    }catch(e){
+        return res.status(500).send(resp.error(e.message))
+    }
+})
+
 .get('/users/:id', async (req, res) => {
     const {id} = req.params;
     const validation = validateInt({id})
@@ -48,11 +62,8 @@ router
 .post('/', async (req, res) => {
     const {title, description, avatar, time, start, end} = {...req.body, ...req.user}
 
-    const validationStr = validateString({title, description, img, content})
+    const validationStr = validateString({title, description, avatar, time})
     if(!validationStr.ok)  return res.status(400).send(resp.error(validationStr.message))
-
-    const validationInt = validateInt({viewed, userId})
-    if(!validationInt.ok)  return res.status(400).send(resp.error(validationInt.message))
 
     try{
         const result = await groupsController.create({title, description, avatar, time, start, end});
@@ -68,11 +79,8 @@ router
     const {id} = req.params;
     const {title, description, avatar, time, start, end} = {...req.body, ...req.user}
 
-    const validationStr = validateString({title, description, img})
+    const validationStr = validateString({title, description, avatar})
     if(!validationStr.ok)  return res.status(400).send(resp.error(validationStr.message))
-
-    const validationInt = validateInt({viewed, content, userId})
-    if(!validationInt.ok)  return res.status(400).send(resp.error(validationInt.message))
 
     try{
         const result = await groupsController.update(id, {title, description, avatar, time, start, end});

@@ -17,7 +17,7 @@ function login(){
             document.location = '/chat'
         },
         error: (response) => {
-           alert(response.responseJSON)
+           alert(response.responseJSON.error)
         }
     })
 }

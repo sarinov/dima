@@ -2,13 +2,21 @@ let openedChatUserId = null;
 let openedChatUserName = null;
 let openedChatUserChatId = null;
 
+let select = document.getElementById("select")
+
+let htmlBody = document.getElementsByTagName("body")[0]
+
+let chatHistory = document.getElementsByClassName("chat-history")[0]
+
+let nameGroup = document.getElementsByClassName("name-group")[0]
+let descGroup = document.getElementsByClassName("name-group")[1]
+
 let chatHistoryGlobal = $('.chat-history');
 
 let chatHistoryListGlobal =  chatHistoryGlobal.find('ul');
 
 let getChatsGlobal = function(){};
 let renderChatsGlobal = function(){};
-
 
 (function(){
 
@@ -81,10 +89,26 @@ let renderChatsGlobal = function(){};
             headers: {"token": localStorage.getItem('token')},
             crossDomain: true,
             success: (response) =>{
-                renderChatsGlobal(response.data)
+                const userList = response.data
+                const user = JSON.parse(localStorage.getItem("user_data"))
+
+                $.ajax({
+                    method: 'GET',
+                    url: 'http://192.168.0.156:5001/api/groups/groupsList/' + user.id,
+                    headers: {"token": localStorage.getItem('token')},
+                    crossDomain: true,
+                    success: (response) =>{
+                        const groupList  = response
+                        renderChatsGlobal(userList, groupList)
+
+                    },
+                    error: (response) => {
+                       alert(response.responseJSON.error)
+                    }
+                })
             },
             error: (response) => {
-               document.location = '/login'
+               alert(response.responseJSON.error)
             }
         })
       },
@@ -112,9 +136,23 @@ let renderChatsGlobal = function(){};
       },
 
 
-      renderChats: function(users){
+      renderChats: function(users, groups){
           const chats = $('.list')
           chats.html('')
+          console.log(groups)
+          for(let g of groups){
+              chats.append(` <li class="clearfix">` +
+              '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />'+
+              '<div class="about">' +
+                `<div class="name">${g.Group.title}</div>`+
+                `<div class="round"></div>`+
+                '<div class="status">'+
+                 `<i class="fa"></i>${g.Group.description}`+
+                 // `${i.isRead}` +
+                '</div>'+
+              '</div> </li>')
+          }
+
             for(let i of users){
                 if (i.isRead) {
                     $(`#${i.chatId} > div.about > div.round`).css({display:'block'})
@@ -205,6 +243,7 @@ let renderChatsGlobal = function(){};
   })
   }
 
+
   const renderChat = function(name, chatId, userId){
     $(`#${chatId} > div.about > div.round`).css({ display: "none"})
     $('.chat-message').show();
@@ -267,3 +306,124 @@ const createChat =  function(toId, name) {
     }
 })
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  var scrollbar = document.body.clientWidth - window.innerWidth + 'px';
+  console.log(scrollbar);
+  document.querySelector('[href="#openModal"]').addEventListener('click', function () {
+    document.body.style.overflow = 'hidden';
+    document.querySelector('#openModal').style.marginLeft = scrollbar;
+  });
+  document.querySelector('[href="#close"]').addEventListener('click', function () {
+    document.body.style.overflow = 'visible';
+    document.querySelector('#openModal').style.marginLeft = '0px';
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  var scrollbar = document.body.clientWidth - window.innerWidth + 'px';
+  console.log(scrollbar);
+  // document.querySelector('[href="#next"]').addEventListener('click', function () {
+  //   // document.body.style.overflow = 'h/idden';
+  //   document.querySelector('#openModal1').style.marginLeft = scrollbar;
+  //   document.querySelector('#openModal1').style.opacity = 1;
+  // });
+  document.querySelector('[href="#close1"]').addEventListener('click', function () {
+    // document.body.style.overflow = 'visible';
+    document.querySelector('#openModal1').style.marginLeft = '0px';
+  });
+});
+
+const createGroup =  function() {
+  // alert(nameGroup.value)
+  $.ajax({
+    method: 'POST',
+    url: 'http://192.168.0.156:5001/api/groups',
+    headers: {"token": localStorage.getItem('token')},
+    data: {
+        title: nameGroup.value,
+        description: descGroup.value,
+        avatar: "avatar",
+        time: '2022',
+        start: new Date(),
+        end: new Date()
+    },
+    crossDomain: true,
+    success: (response) =>{
+        const {data} = response
+        const chats = $('.list')
+        console.log(data)
+
+        var scrollbar = document.body.clientWidth - window.innerWidth + 'px';
+        document.querySelector('#openModal').style.opacity = 0;
+        document.querySelector('.container-modal-1').style.display = 'none';
+        document.querySelector('#openModal').style.zIndex = -11111;
+        document.querySelector('#openModal').style.display = 'none';
+        document.body.style.overflow = 'hidden';
+        document.querySelector('#openModal').style.marginLeft = scrollbar;
+        document.querySelector('#openModal1').style.opacity = 1;
+        document.querySelector('#openModal1').style.zIndex = 999999;
+        document.querySelector('.modal-body').style.zIndex = 999999;
+
+        //   chats.prepend(` <li class='clearfix readible'>` +
+        //   '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />'+
+        //   '<div class="about">' +
+        //     `<div class="name">${data.title}</div>`+
+        //     '<div class="status">'+
+        //      `<i class="fa"></i> ${data.description}`+
+        //     '</div>'+
+        //   '</div> </li>')
+
+        //   $.ajax({
+        //     method: 'POST',
+        //     url: 'http://192.168.0.156:5001/api/groupUsers',
+        //     headers: {"token": localStorage.getItem('token')},
+        //     data: {
+        //         groupId: data.id
+        //     },
+        //     crossDomain: true,
+        //     success: (response) =>{
+        //         console.log(response)
+        //     },
+        //     error: (response) => {
+        //        alert(response.responseJSON.error)
+        //     }
+        // })
+
+    },
+    error: (response) => {
+       alert(response.responseJSON.error)
+    }
+})
+}
+
+function MouseXY(event) {
+    xMouse = event.pageX
+    yMouse = event.pageY
+}
+
+function transformPanel() {
+    select.style.display = "block"
+    var selectOffsetLeft = select.offsetLeft
+    var selectOffsetTop = select.offsetTop
+    if (xMouse > 1600) {
+        var x = xMouse - selectOffsetLeft - 199
+    } else {
+        var x = xMouse - selectOffsetLeft - 1
+    }
+
+    if (yMouse > 600) {
+        var y = yMouse - selectOffsetTop - 99
+    } else {
+        var y = yMouse - selectOffsetTop - 1
+    }
+
+    select.style.transform = "translate(" + x + "px," + y +"px)"
+}
+
+
+chatHistory.addEventListener("click",transformPanel,false)
+
+select.addEventListener("click",function(){select.style.display = "none"},false)
+
+htmlBody.addEventListener("mousemove", MouseXY, false)

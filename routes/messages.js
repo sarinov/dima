@@ -19,6 +19,7 @@ router
 
 .get('/chatMessages/:chatId', async (req, res) => {
     const {chatId} = req.params;
+    console.log(req.user)
     try{
         return res.send(resp.data(await messagesController.getChatMessages(chatId)))
     }catch(e){
