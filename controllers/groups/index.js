@@ -55,6 +55,20 @@ methods.usersList = async function(id){
     return result;
 }
 
+methods.groupList = async function(userId){
+    const result = GroupUser.findAll({
+        where: {
+            userId
+        },
+        include: [{
+            model: Group,
+            require: false
+        }]
+    });
+
+    return result;
+}
+
 // methods.usersList = async function(id){
 //     const result = User.findOne({
 //         where: {

@@ -7,7 +7,7 @@ router
 
 .use('/comments', verifyToken, require('./comments'))
 
-.use('/groups', require('./groups'))
+.use('/groups', verifyToken, require('./groups'))
 
 .use('/chat', require('./chat'))
 
@@ -15,7 +15,7 @@ router
 
 .use('/posts', require('./posts'))
 
-.use('/groupUsers', require('./groupUser'))
+.use('/groupUsers', verifyToken, require('./groupUser'))
 
 .use('/messages', verifyToken,  require('./messages'))
 
