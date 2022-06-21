@@ -2,14 +2,17 @@ let openedChatUserId = null;
 let openedChatUserName = null;
 let openedChatUserChatId = null;
 
+let listUser = []
+let group
+
 let select = document.getElementById("select")
 
 let htmlBody = document.getElementsByTagName("body")[0]
 
 let chatHistory = document.getElementsByClassName("chat-history")[0]
 
-let nameGroup = document.getElementsByClassName("name-group")[0]
-let descGroup = document.getElementsByClassName("name-group")[1]
+let nameGroup = document.getElementsByClassName("form-control")[0]
+let descGroup = document.getElementsByClassName("form-control")[1]
 
 let chatHistoryGlobal = $('.chat-history');
 
@@ -85,7 +88,7 @@ let renderChatsGlobal = function(){};
         if(!url.includes('chat')) return
         $.ajax({
             method: 'GET',
-            url: 'http://192.168.0.156:5001/api/messages/chats',
+            url: 'http://192.168.1.66:5001/api/messages/chats',
             headers: {"token": localStorage.getItem('token')},
             crossDomain: true,
             success: (response) =>{
@@ -94,7 +97,7 @@ let renderChatsGlobal = function(){};
 
                 $.ajax({
                     method: 'GET',
-                    url: 'http://192.168.0.156:5001/api/groups/groupsList/' + user.id,
+                    url: 'http://192.168.1.66:5001/api/groups/groupsList/' + user.id,
                     headers: {"token": localStorage.getItem('token')},
                     crossDomain: true,
                     success: (response) =>{
@@ -117,7 +120,7 @@ let renderChatsGlobal = function(){};
       sendMessage: function(content, userId){
         $.ajax({
           method: 'POST',
-          url: 'http://192.168.0.156:5001/api/messages/sendMessage',
+          url: 'http://192.168.1.66:5001/api/messages/sendMessage',
           data: {
             content,
             type: 'text',
@@ -230,7 +233,7 @@ let renderChatsGlobal = function(){};
   const getChatMessages =  function() {
     $.ajax({
       method: 'GET',
-      url: 'http://192.168.0.156:5001/api/messages/chatMessages/' + openedChatUserChatId,
+      url: 'http://192.168.1.66:5001/api/messages/chatMessages/' + openedChatUserChatId,
       headers: {"token": localStorage.getItem('token')},
       crossDomain: true,
       success: (response) =>{
@@ -263,7 +266,7 @@ const searchUser = function (e) {
   }
   $.ajax({
     method: 'GET',
-    url: 'http://192.168.0.156:5001/api/users/find?query=' + e.target.value,
+    url: 'http://192.168.1.66:5001/api/users/find?query=' + e.target.value,
     headers: {"token": localStorage.getItem('token')},
     crossDomain: true,
     success: (response) =>{
@@ -285,13 +288,45 @@ const searchUser = function (e) {
        alert(response.responseJSON.error)
     }
 })
+}
 
+const searchUserGroup = function (e) {
+  if(!e.target.value) {
+    const list = $('#listGroupUser')
+    list.html('')
+    return
+  }
+  $.ajax({
+    method: 'GET',
+    url: 'http://192.168.1.66:5001/api/users/find?query=' + e.target.value,
+    headers: {"token": localStorage.getItem('token')},
+    crossDomain: true,
+    success: (response) =>{
+        const {data} = response
+        const list = $('#listGroupUser')
+          list.html('')
+        for(let i of data){
+          list.append(` <li class="list-group-item clearfix">` +
+          `<input onchange="checkboxChecked(event)"  type="checkbox" class="check form-check-input" id='${i.email}' data-index='${i.id}'>`+
+          '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />'+
+          '<div class="about">' +
+            `<div class="white name">${i.name} ${i.surname} </div>`+
+            '<div class="white status">'+
+             '<i class=" fa fa-circle online"></i> online'+
+            '</div>'+
+          '</div> </li>')
+      }
+    },
+    error: (response) => {
+       alert(response.responseJSON.error)
+    }
+})
 }
 
 const createChat =  function(toId, name) {
   $.ajax({
     method: 'POST',
-    url: 'http://192.168.0.156:5001/api/chat/createChat',
+    url: 'http://192.168.1.66:5001/api/chat/createChat',
     headers: {"token": localStorage.getItem('token')},
     data: {
         fromId: JSON.parse(localStorage.getItem('user_data')).id,
@@ -307,38 +342,11 @@ const createChat =  function(toId, name) {
 })
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  var scrollbar = document.body.clientWidth - window.innerWidth + 'px';
-  console.log(scrollbar);
-  document.querySelector('[href="#openModal"]').addEventListener('click', function () {
-    document.body.style.overflow = 'hidden';
-    document.querySelector('#openModal').style.marginLeft = scrollbar;
-  });
-  document.querySelector('[href="#close"]').addEventListener('click', function () {
-    document.body.style.overflow = 'visible';
-    document.querySelector('#openModal').style.marginLeft = '0px';
-  });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-  var scrollbar = document.body.clientWidth - window.innerWidth + 'px';
-  console.log(scrollbar);
-  // document.querySelector('[href="#next"]').addEventListener('click', function () {
-  //   // document.body.style.overflow = 'h/idden';
-  //   document.querySelector('#openModal1').style.marginLeft = scrollbar;
-  //   document.querySelector('#openModal1').style.opacity = 1;
-  // });
-  document.querySelector('[href="#close1"]').addEventListener('click', function () {
-    // document.body.style.overflow = 'visible';
-    document.querySelector('#openModal1').style.marginLeft = '0px';
-  });
-});
-
 const createGroup =  function() {
   // alert(nameGroup.value)
   $.ajax({
     method: 'POST',
-    url: 'http://192.168.0.156:5001/api/groups',
+    url: 'http://192.168.1.66:5001/api/groups',
     headers: {"token": localStorage.getItem('token')},
     data: {
         title: nameGroup.value,
@@ -354,47 +362,58 @@ const createGroup =  function() {
         const chats = $('.list')
         console.log(data)
 
+        group = data.id
+
         var scrollbar = document.body.clientWidth - window.innerWidth + 'px';
-        document.querySelector('#openModal').style.opacity = 0;
-        document.querySelector('.container-modal-1').style.display = 'none';
-        document.querySelector('#openModal').style.zIndex = -11111;
-        document.querySelector('#openModal').style.display = 'none';
-        document.body.style.overflow = 'hidden';
-        document.querySelector('#openModal').style.marginLeft = scrollbar;
-        document.querySelector('#openModal1').style.opacity = 1;
-        document.querySelector('#openModal1').style.zIndex = 999999;
-        document.querySelector('.modal-body').style.zIndex = 999999;
 
-        //   chats.prepend(` <li class='clearfix readible'>` +
-        //   '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />'+
-        //   '<div class="about">' +
-        //     `<div class="name">${data.title}</div>`+
-        //     '<div class="status">'+
-        //      `<i class="fa"></i> ${data.description}`+
-        //     '</div>'+
-        //   '</div> </li>')
-
-        //   $.ajax({
-        //     method: 'POST',
-        //     url: 'http://192.168.0.156:5001/api/groupUsers',
-        //     headers: {"token": localStorage.getItem('token')},
-        //     data: {
-        //         groupId: data.id
-        //     },
-        //     crossDomain: true,
-        //     success: (response) =>{
-        //         console.log(response)
-        //     },
-        //     error: (response) => {
-        //        alert(response.responseJSON.error)
-        //     }
-        // })
+          chats.prepend(` <li class='clearfix readible'>` +
+          '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />'+
+          '<div class="about">' +
+            `<div class="name">${data.title}</div>`+
+            '<div class="status">'+
+             `<i class="fa"></i> ${data.description}`+
+            '</div>'+
+          '</div> </li>')
 
     },
     error: (response) => {
        alert(response.responseJSON.error)
     }
 })
+}
+
+const addUserInGroup = function(){
+      $.ajax({
+        method: 'POST',
+        url: 'http://192.168.1.66:5001/api/groupUsers',
+        headers: {"token": localStorage.getItem('token')},
+        data: {
+            groupId: group,
+            listUser: listUser
+        },
+        crossDomain: true,
+        success: (response) =>{
+            console.log(response)
+        },
+        error: (response) => {
+           alert(response.responseJSON.error)
+        }
+    })
+}
+
+function checkboxChecked(event) {
+    let chbox = document.getElementById(`${event.currentTarget.id}`);
+	if (chbox.checked) {
+		listUser.push(event.currentTarget.dataset.index)
+        alert (listUser);
+	}
+	else {
+        let myIndex = listUser.indexOf(event.currentTarget.dataset.index);
+        if (myIndex !== -1) {
+            listUser.splice(myIndex, 1);
+        }
+        alert (listUser);
+	}
 }
 
 function MouseXY(event) {
@@ -420,7 +439,6 @@ function transformPanel() {
 
     select.style.transform = "translate(" + x + "px," + y +"px)"
 }
-
 
 chatHistory.addEventListener("click",transformPanel,false)
 
