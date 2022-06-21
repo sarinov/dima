@@ -1,4 +1,4 @@
-const { Messages, GroupMessage, PrivateMessage, User, Chat} = require('../../models');
+const { Messages, GroupMessage, PrivateMessage, User, Chat, GroupUser} = require('../../models');
 const {Op} = require('sequelize')
 const methods = {}
 
@@ -34,6 +34,17 @@ methods.sendMessage = async function(data, fromId, toId, status=''){
         fromId, toId, chatId: chat.id, messageId: message.id, isRead: false, status
     })
     return chat.id;
+}
+
+methods.sendMessageGroup = async function(data, fromId, groupId, status=''){
+    data.time = new Date(data.time).toISOString().slice(0, 19).replace('T', ' ');
+
+    const message = await Messages.create(data);
+   
+    const result = await GroupMessage.create({
+        fromId, groupId, messageId: message.id, isRead: false, status
+    })
+    return message.id;
 }
 
 
@@ -76,6 +87,13 @@ methods.getChatsList = async function(userId){
     return user;
 
 }
+methods.getChatsListGroup = async function(userId){
+    
+    const data = await GroupUser.findAll({where: {userId}})
+
+    return data;
+
+}
 
 methods.getChatMessages = async function(chatId){
 
@@ -92,6 +110,31 @@ methods.getChatMessages = async function(chatId){
     const result = PrivateMessage.findAll({
         where: {
             chatId
+        },
+        include: [{
+            model: Messages,
+            require: false
+        }]
+    });
+
+    return result;
+}
+
+methods.getChatMessagesGroup = async function(groupId){
+
+    // GroupMessage.update({
+    //     isRead: true
+    // },
+    // {
+    //     where: {
+    //         groupId
+    //     }
+    // }
+    // )
+
+    const result = GroupMessage.findAll({
+        where: {
+            groupId
         },
         include: [{
             model: Messages,

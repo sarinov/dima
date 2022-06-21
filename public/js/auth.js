@@ -60,7 +60,7 @@ function checkAuth(){
         success: (response) =>{
         },
         error: (response) => {
-        //    document.location = '/login'
+           document.location = '/login'
         }
     })
 }

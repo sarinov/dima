@@ -6,7 +6,7 @@ const pages = require(`./routes/pages`);
 const port = 5001;
 const Response = require('./utils/ApiResponse')
 const cors = require('cors')
-const {getChatsList} = require('./controllers/messages')
+const {getChatsList, getChatsListGroup} = require('./controllers/messages')
 
 const socketOptions = {
     allowEIO3: true,
@@ -62,9 +62,13 @@ io.on("connection", async (socket) => {
     console.log(socket.handshake.query.id)
     const {id} = socket.handshake.query;
     const chats = await getChatsList(id)
+    const groups = await getChatsListGroup(id)
 
     socket.join(`user_${id}`);
     for (const chat of chats) {
         socket.join(`chat_${chat.chatId}`);
+    }
+    for (const group of groups) {
+        socket.join(`group_${group.groupId}`);
     }
 });

@@ -55,7 +55,10 @@ let renderChatsGlobal = function(){};
         this.scrollToBottom();
         if (this.messageToSend.trim() !== '') {
           console.log(this.messageToSend, openedChatUserId)
-          this.sendMessage(this.messageToSend, openedChatUserId)
+          if(openedChatUserId)
+            this.sendMessage(this.messageToSend, openedChatUserId)
+          else
+            this.sendMessageGroup(this.messageToSend, openedChatUserChatId)
           var template = Handlebars.compile( $("#message-template").html());
           var context = {
             messageOutput: this.messageToSend,
@@ -88,7 +91,7 @@ let renderChatsGlobal = function(){};
         if(!url.includes('chat')) return
         $.ajax({
             method: 'GET',
-            url: 'http://192.168.1.66:5001/api/messages/chats',
+            url: 'http://192.168.0.156:5001/api/messages/chats',
             headers: {"token": localStorage.getItem('token')},
             crossDomain: true,
             success: (response) =>{
@@ -97,7 +100,7 @@ let renderChatsGlobal = function(){};
 
                 $.ajax({
                     method: 'GET',
-                    url: 'http://192.168.1.66:5001/api/groups/groupsList/' + user.id,
+                    url: 'http://192.168.0.156:5001/api/groups/groupsList/' + user.id,
                     headers: {"token": localStorage.getItem('token')},
                     crossDomain: true,
                     success: (response) =>{
@@ -120,12 +123,33 @@ let renderChatsGlobal = function(){};
       sendMessage: function(content, userId){
         $.ajax({
           method: 'POST',
-          url: 'http://192.168.1.66:5001/api/messages/sendMessage',
+          url: 'http://192.168.0.156:5001/api/messages/sendMessage',
           data: {
             content,
             type: 'text',
             time: new Date(),
             toId: userId
+          },
+          headers: {"token": localStorage.getItem('token')},
+          crossDomain: true,
+          success: (response) =>{
+              console.log(response);
+          },
+          error: (response) => {
+             alert(response.responseJSON.error)
+          }
+      })
+      },
+
+      sendMessageGroup: function(content, groupId){
+        $.ajax({
+          method: 'POST',
+          url: 'http://192.168.0.156:5001/api/messages/sendMessage/group',
+          data: {
+            content,
+            type: 'text',
+            time: new Date(),
+            groupId
           },
           headers: {"token": localStorage.getItem('token')},
           crossDomain: true,
@@ -144,7 +168,7 @@ let renderChatsGlobal = function(){};
           chats.html('')
           console.log(groups)
           for(let g of groups){
-              chats.append(` <li class="clearfix">` +
+              chats.append(` <li onclick="renderChat('${g.Group.title}', ${g.groupId})" id="${g.groupId}" class="clearfix">` +
               '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" alt="avatar" />'+
               '<div class="about">' +
                 `<div class="name">${g.Group.title}</div>`+
@@ -233,7 +257,22 @@ let renderChatsGlobal = function(){};
   const getChatMessages =  function() {
     $.ajax({
       method: 'GET',
-      url: 'http://192.168.1.66:5001/api/messages/chatMessages/' + openedChatUserChatId,
+      url: 'http://192.168.0.156:5001/api/messages/chatMessages/' + openedChatUserChatId,
+      headers: {"token": localStorage.getItem('token')},
+      crossDomain: true,
+      success: (response) =>{
+          renderChatMessages(response.data)
+
+      },
+      error: (response) => {
+         alert(response.responseJSON.error)
+      }
+  })
+  }
+  const getChatMessagesGroup =  function() {
+    $.ajax({
+      method: 'GET',
+      url: 'http://192.168.0.156:5001/api/messages/chatMessages/group/' + openedChatUserChatId,
       headers: {"token": localStorage.getItem('token')},
       crossDomain: true,
       success: (response) =>{
@@ -247,7 +286,7 @@ let renderChatsGlobal = function(){};
   }
 
 
-  const renderChat = function(name, chatId, userId){
+  const renderChat = function(name, chatId, userId = ''){
     $(`#${chatId} > div.about > div.round`).css({ display: "none"})
     $('.chat-message').show();
     const chat_with = $('.chat-with');
@@ -255,7 +294,8 @@ let renderChatsGlobal = function(){};
     openedChatUserId = userId;
     openedChatUserName = name;
     openedChatUserChatId = chatId;
-    getChatMessages()
+    if(userId) getChatMessages()
+    else getChatMessagesGroup()
     chat_with.append(`${name}, ${userId}`)
 }
 
@@ -266,7 +306,7 @@ const searchUser = function (e) {
   }
   $.ajax({
     method: 'GET',
-    url: 'http://192.168.1.66:5001/api/users/find?query=' + e.target.value,
+    url: 'http://192.168.0.156:5001/api/users/find?query=' + e.target.value,
     headers: {"token": localStorage.getItem('token')},
     crossDomain: true,
     success: (response) =>{
@@ -298,7 +338,7 @@ const searchUserGroup = function (e) {
   }
   $.ajax({
     method: 'GET',
-    url: 'http://192.168.1.66:5001/api/users/find?query=' + e.target.value,
+    url: 'http://192.168.0.156:5001/api/users/find?query=' + e.target.value,
     headers: {"token": localStorage.getItem('token')},
     crossDomain: true,
     success: (response) =>{
@@ -326,7 +366,7 @@ const searchUserGroup = function (e) {
 const createChat =  function(toId, name) {
   $.ajax({
     method: 'POST',
-    url: 'http://192.168.1.66:5001/api/chat/createChat',
+    url: 'http://192.168.0.156:5001/api/chat/createChat',
     headers: {"token": localStorage.getItem('token')},
     data: {
         fromId: JSON.parse(localStorage.getItem('user_data')).id,
@@ -346,7 +386,7 @@ const createGroup =  function() {
   // alert(nameGroup.value)
   $.ajax({
     method: 'POST',
-    url: 'http://192.168.1.66:5001/api/groups',
+    url: 'http://192.168.0.156:5001/api/groups',
     headers: {"token": localStorage.getItem('token')},
     data: {
         title: nameGroup.value,
@@ -385,7 +425,7 @@ const createGroup =  function() {
 const addUserInGroup = function(){
       $.ajax({
         method: 'POST',
-        url: 'http://192.168.1.66:5001/api/groupUsers',
+        url: 'http://192.168.0.156:5001/api/groupUsers',
         headers: {"token": localStorage.getItem('token')},
         data: {
             groupId: group,

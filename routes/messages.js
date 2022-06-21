@@ -26,6 +26,15 @@ router
         return res.status(500).send(resp.error(e.message))
     }
 })
+.get('/chatMessages/group/:chatId', async (req, res) => {
+    const {chatId} = req.params;
+    console.log(req.user)
+    try{
+        return res.send(resp.data(await messagesController.getChatMessagesGroup(chatId)))
+    }catch(e){
+        return res.status(500).send(resp.error(e.message))
+    }
+})
 
 .put('/readMessages/:chatId', async (req, res) => {
     const {chatId} = req.params;
@@ -50,6 +59,17 @@ router
         const {content, type, time, toId} = {...req.body, ...req.user}
         let chatId = await messagesController.sendMessage({content, type, time},req.user.userId,toId)
         req.app.get('io').to(`chat_${chatId}`).emit("sendMessage", {content, time, toId, chatId});
+        return res.send(resp.data('Success'))
+    }catch(e){
+        return res.status(500).send(resp.error(e.message))
+    }
+})
+
+.post('/sendMessage/group', async (req, res) => {
+    try{
+        const {content, type, time, groupId} = {...req.body, ...req.user}
+        let chatId = await messagesController.sendMessageGroup({content, type, time}, req.user.userId, groupId)
+        req.app.get('io').to(`group_${groupId}`).emit("sendMessage", {content, time, fromId: req.user.userId, chatId: groupId});
         return res.send(resp.data('Success'))
     }catch(e){
         return res.status(500).send(resp.error(e.message))
