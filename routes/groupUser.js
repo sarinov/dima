@@ -32,17 +32,25 @@ router
 })
 
 .post('/', async (req, res) => {
-    const {groupId, userId} = {...req.body, ...req.user}
+    const {groupId, listUser} = {...req.body}
 
-    const validationInt = validateInt({groupId, userId})
-    if(!validationInt.ok)  return res.status(400).send(resp.error(validationInt.message))
+    let allResult
 
-    try{
-        const result = await groupUsersController.create({groupId, userId});
-        return res.send(resp.data(result))
-    }catch(e){
-        return res.status(500).send(resp.error(e.message))
+    console.log(listUser)
+
+    for(let userId of listUser){
+        console.log(userId)
+            const validationInt = validateInt({groupId, userId})
+            if(!validationInt.ok)  return res.status(400).send(resp.error(validationInt.message))
+
+            try{
+                const result = await groupUsersController.create({groupId, userId});
+                allResult += result
+            }catch(e){
+                return res.status(500).send(resp.error(e.message))
+            }
     }
+    return res.send(resp.data(allResult))
 
 })
 
