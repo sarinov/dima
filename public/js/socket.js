@@ -17,19 +17,19 @@ var socket = io("ws://192.168.0.156:5001", { query: { id: user.id }});
 var audio = new Audio();
 audio.src='/audio/sms.mp3';
 // when the sound has been loaded, execute your code
-audio.oncanplaythrough = (event) => {
-    var playedPromise = audio.play();
-    if (playedPromise) {
-        playedPromise.catch((e) => {
-             console.log(e)
-             if (e.name === 'NotAllowedError' || e.name === 'NotSupportedError') {
-                   console.log(e.name);
-              }
-         }).then(() => {
-              console.log("playing sound !!!");
-         });
-     }
-}
+// audio.oncanplaythrough = (event) => {
+//     var playedPromise = audio.play();
+//     if (playedPromise) {
+//         playedPromise.catch((e) => {
+//              console.log(e)
+//              if (e.name === 'NotAllowedError' || e.name === 'NotSupportedError') {
+//                    console.log(e.name);
+//               }
+//          }).then(() => {
+//               console.log("playing sound !!!");
+//          });
+//      }
+// }
 
 socket.on('sendMessage', function(msg) {
     console.log(msg);
@@ -55,7 +55,8 @@ socket.on('sendMessage', function(msg) {
         var templateResponse = Handlebars.compile( $("#message-response-template").html());
         var context = {
             messageOutput: msg.content,
-            time: msg.time
+            time: msg.time,
+            name: msg.name
           };
         if(msg.chatId == openedChatUserChatId){
             chatHistoryListGlobal.append(templateResponse(context));

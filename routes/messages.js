@@ -4,7 +4,7 @@ const resp = new Response();
 const {validateInt, validateString} = require('../utils/validator')
 
 const messagesController = require('../controllers/messages')
-
+const {User} = require('../models')
 const router = Router()
 
 router
@@ -68,8 +68,9 @@ router
 .post('/sendMessage/group', async (req, res) => {
     try{
         const {content, type, time, groupId} = {...req.body, ...req.user}
+        const username = await User.findOne({where: {id: req.user.userId}})
         let chatId = await messagesController.sendMessageGroup({content, type, time}, req.user.userId, groupId)
-        req.app.get('io').to(`group_${groupId}`).emit("sendMessage", {content, time, fromId: req.user.userId, chatId: groupId});
+        req.app.get('io').to(`group_${groupId}`).emit("sendMessage", {content, time, fromId: req.user.userId, chatId: groupId, name: username.name});
         return res.send(resp.data('Success'))
     }catch(e){
         return res.status(500).send(resp.error(e.message))

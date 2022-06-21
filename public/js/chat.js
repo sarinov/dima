@@ -238,7 +238,8 @@ let renderChatsGlobal = function(){};
         messageOutput: message.Message.content,
         time: message.Message.time,
         id_msg: message.Message.id,
-        id: message.id
+        id: message.id,
+        name: message.User.name
       };
 
       if(message.fromId === current_id){

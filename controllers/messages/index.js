@@ -139,7 +139,12 @@ methods.getChatMessagesGroup = async function(groupId){
         include: [{
             model: Messages,
             require: false
-        }]
+        },
+    {
+        model: User,
+        require: false
+
+    }]
     });
 
     return result;
