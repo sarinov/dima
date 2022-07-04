@@ -12,7 +12,7 @@ if(!user) return;
 
 user = JSON.parse(user)
 
-var socket = io("ws://192.168.0.156:5001", { query: { id: user.id }});
+var socket = io("ws://192.168.1.97:5001", { query: { id: user.id }});
 
 var audio = new Audio();
 audio.src='/audio/sms.mp3';
@@ -38,7 +38,7 @@ socket.on('sendMessage', function(msg) {
         if (openedChatUserChatId) {
             $.ajax({
               method: 'PUT',
-              url: 'http://192.168.0.156:5001/api/messages/readMessages/' + openedChatUserChatId,
+              url: 'http://192.168.1.97:5001/api/messages/readMessages/' + openedChatUserChatId,
               headers: {"token": localStorage.getItem('token')},
               crossDomain: true,
               success: () =>{

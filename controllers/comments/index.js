@@ -1,10 +1,24 @@
-const { Comment } = require('../../models');
+const { Comment, User } = require('../../models');
 const methods = {}
 
 
 
 methods.getAll = async function(){
     const result = Comment.findAll();
+
+    return result;
+}
+
+methods.getOneIncludePost = async function(id){
+    const result = Comment.findAll({
+        where: {
+            postId : id
+        },
+        include: [{
+            model: User,
+            require: false
+        }]
+    });
 
     return result;
 }

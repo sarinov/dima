@@ -8,15 +8,34 @@
 <body>
     <%- include('../partials/header'); %>
 
+    <input onclick='CheckUser("/create-post")' id="createPost" type="button" value="Создать пост" class="btn btn-primary" />
+
     <% for(var i = posts.length - 1; i >= 0; i--) {%>
-        <div class="post">
-            <h2 class="post_title"><%= posts[i].title %></h2>
-            <h2 class="post_title"><%= posts[i].description %></h2>
-            <h2 class="post_title"><%= posts[i].img %></h2>
-            <h2 class="post_title"><%= posts[i].viewed %></h2>
-            <h2 class="post_title"><%= posts[i].content %></h2>
-            <h2 class="post_title"><%= posts[i].userid %></h2>
-        </div>
+        <div class="row posts">
+        <ul class="portfolio-img">
+            <li data-id="p-1" data-type="web-design" class="span3">
+                <div class="work">
+                    <a href="/img/work1.jpg" rel="prettyPhoto">
+                        <img src="/img/work1.jpg" alt="">
+                    </a>
+                    <h4><%= posts[i].title %></h4>
+                    <p><%= posts[i].description %></p>
+                    <p class="author">Автор: <%= posts[i].User.name %> <%= posts[i].User.surname %></p>
+                    <a onclick="showComment('<%= posts[i].id %>')" >
+                        <img src="/img/comment.png" class="img-comment"/>
+                    </a>
+                    <div class='body-comments <%= posts[i].id %>'>
+                        <form class="send-comment">
+                            <input placeholder="Напиши комментарий" data-button = '<%= posts[i].id %>' class="form-control inputComment" type="username"/>
+                            <input onclick="sendComment('<%= posts[i].id %>')" type="button" value="Отправить" class="submitComment btn btn-primary" />
+                        </form>
+                        <div id='<%= posts[i].id %>'>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+      </div>
     <%} %>
 
     <%- include('../partials/footer'); %>

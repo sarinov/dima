@@ -31,6 +31,20 @@ router
     }
 })
 
+.get('/CommentsInPost/:id', async (req, res) => {
+    const {id} = req.params;
+    const validation = validateInt({id})
+    if(!validation.ok)  return res.status(400).send(resp.error(validation.message))
+
+    try{
+        const result = await commentsController.getOneIncludePost(id);
+        if(!result) return res.status(400).send(resp.error("Comment doesn`t exist!"))
+        return res.send(resp.data(result))
+    }catch(e){
+        return res.status(500).send(resp.error(e.message))
+    }
+})
+
 
 .post('/', async (req, res) => {
     const {content, postId, userId, time} = {...req.body, ...req.user}

@@ -8,12 +8,24 @@
 <body>
     <%- include('../partials/header'); %>
 
-    <div class="container">
-        <div class="login">
-                <input type="text" placeholder="email" name="email">
-                <input type="password" placeholder="password" name="password">
-                <button  onclick="login()">Login</button>
-        </div>
+    <div class="body-form">
+        <h1 class="title-form">Вход</h1>
+
+        <form class="login" method="post">
+
+            <label class="username form-label" for="username">Email: </label>
+            <input name="email" id="mail" class="form-control" type="username"/>
+
+            <br />
+
+            <label  class="form-label" for="password">Password: </label>
+            <input name="password" id="password" class="form-control" type="password"/>
+
+            <input onclick="login()" id="loginBtn" type="button" value="Login" class="btn btn-outline-primary" />
+            <br />
+            <input onclick='redirect("/registration")' id="RegBtn" type="button" value="Registration" class="btn btn-outline-primary" />
+        </form>
+
     </div>
 
     <%- include('../partials/footer'); %>

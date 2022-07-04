@@ -8,16 +8,44 @@
 <body>
     <%- include('../partials/header'); %>
 
-    <div class="container">
-        <div class="registration">
-                <input type="text" name="name" placeholder="name">
-                <input type="text" name="surname" placeholder="surname">
-                <input type="text" name="email" placeholder="email">
-                <input type="password" name="password" placeholder="password">
-                <input type="text" name="age" placeholder="age">
-                <input type="text" name="phone" placeholder="phone">
-                <button  onclick="registration()">registration</button>
-        </div>
+    <div class="body-form">
+        <h1 class="title-form">Регистрация</h1>
+
+        <form class="login" method="post">
+
+          <label  class="form-label">Имя: </label>
+          <input name="name" id="password" class="form-control" type="username"/>
+
+          <br />
+
+          <label  class="form-label">Фамилия: </label>
+          <input name="surname" id="password" class="form-control" type="username"/>
+
+          <br />
+
+            <label class="form-label">Email: </label>
+            <input name="email" id="mail" class="form-control" type="username"/>
+
+            <br />
+
+            <label  class="form-label">Пароль: </label>
+            <input name="password" id="password" class="form-control" type="password"/>
+
+            <br />
+
+            <label  class="form-label">Возраст: </label>
+            <input name="age" id="password" class="form-control" type="username"/>
+
+            <br />
+
+            <label  class="form-label">Номер телефона: </label>
+            <input name="phone" id="password" class="form-control" type="username"/>
+
+            <input onclick="registration()" id="RegBtn" type="button" value="Registration" class="btn btn-outline-primary" />
+            <br />
+            <input onclick="redirect('/login')" id="loginBtn" type="button" value="Login" class="btn btn-outline-primary" />
+        </form>
+
     </div>
 
     <%- include('../partials/footer'); %>

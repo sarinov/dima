@@ -13,7 +13,7 @@ router
 
 .use('/groupMessages', require('./groupmessages'))
 
-.use('/posts', require('./posts'))
+.use('/posts', verifyToken, require('./posts'))
 
 .use('/groupUsers', verifyToken, require('./groupUser'))
 

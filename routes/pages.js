@@ -6,7 +6,8 @@ router
 
 .get('/', async (req, res) => {
     const posts = await postController.getAll()
-    res.render('pages/index', {posts});})
+    res.render('pages/index', {posts});
+})
 
 .get('/create-post', async (req, res) => {
     res.render('pages/create-post')

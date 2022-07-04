@@ -1,0 +1,162 @@
+hr{
+    width: 90%;
+    color: gray;
+    height: 2px;
+}
+
+.body-comments{
+    display: none;
+    margin-top: 4%;
+}
+
+.inputComment{
+    margin-left: 2%;
+}
+
+.img-comment{
+    margin-left: 3%;
+}
+
+.send-comment{
+    display: flex;
+}
+
+.submitComment{
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+#createPost{
+  align:center;
+  margin-left:90%;
+  margin-top:1%;
+}
+
+ul.portfolio-img {
+    margin: 0;
+    overflow: hidden;
+}
+
+ul.portfolio-img li {
+    list-style: none;
+}
+
+.portfolio-title h3 {
+    width: 220px;
+    margin: 0 auto;
+    background: #fff;
+    font-size: 24px;
+    color: #5d5d5d;
+}
+
+.work {
+    max-width: 725px;
+    margin-left: 30vw;
+    margin-top: 40px;
+    padding-bottom: 20px;
+    background: #f8f8f8;
+    border-bottom: 4px solid #010042;
+}
+
+.work:hover img {
+    opacity: 0.7;
+    -o-transition: all .3s;
+    -moz-transition: all .3s;
+    -webkit-transition: all .3s;
+    -ms-transition: all .3s;
+}
+
+.work:hover {
+    box-shadow:
+        0 5px 15px 0 rgba(0,0,0,.05),
+        0 1px 25px 0 rgba(0,0,0,.05) inset,
+        0 -1px 25px 0 rgba(0,0,0,.05) inset;
+    -o-transition: all .5s;
+    -moz-transition: all .5s;
+    -webkit-transition: all .5s;
+    -ms-transition: all .5s;
+}
+
+.work .icon-awesome {
+    margin-top: 15px;
+    font-size: 22px;
+    line-height: 22px;
+}
+
+.work .icon-awesome a {
+    display: inline-block;
+    padding: 5px 9px;
+    background: #010042;
+    color: #fff;
+    -moz-border-radius: 19px;
+    -webkit-border-radius: 19px;
+    border-radius: 19px;
+    -moz-box-shadow:
+        0 1px 25px 0 rgba(0,0,0,.05) inset,
+        0 -1px 25px 0 rgba(0,0,0,.05) inset;
+    -webkit-box-shadow:
+        0 1px 25px 0 rgba(0,0,0,.05) inset,
+        0 -1px 25px 0 rgba(0,0,0,.05) inset;
+    box-shadow:
+        0 1px 25px 0 rgba(0,0,0,.05) inset,
+        0 -1px 25px 0 rgba(0,0,0,.05) inset;
+}
+
+.work .icon-awesome a:hover {
+    background: #5d5d5d;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.work .icon-awesome a:active {
+    -moz-box-shadow:
+        0 5px 10px 0 rgba(0,0,0,.15) inset,
+        0 -1px 25px 0 rgba(0,0,0,.05) inset;
+    -webkit-box-shadow:
+        0 5px 10px 0 rgba(0,0,0,.15) inset,
+        0 -1px 25px 0 rgba(0,0,0,.05) inset;
+    box-shadow:
+        0 5px 10px 0 rgba(0,0,0,.15) inset,
+        0 -1px 25px 0 rgba(0,0,0,.05) inset;
+}
+
+.work h4 {
+    padding-left: 20px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #5d5d5d;
+    text-transform: uppercase;
+    text-shadow: 0 1px 0 rgba(255,255,255,.7);
+}
+.work .comment h4 {
+    padding-left: 40px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #5d5d5d;
+    text-transform: uppercase;
+    text-shadow: 0 1px 0 rgba(255,255,255,.7);
+}
+
+.work .comment p {
+    padding: 20px 20px 20px 50px;
+
+    line-height: 24px;
+    word-wrap: break-word;
+}
+
+.work p {
+  padding: 20px;
+    line-height: 24px;
+    word-wrap: break-word;
+}
+
+p.title :hover{
+    color: skyblue;
+}
+
+.work .author {
+  padding: 20px;
+    line-height: 24px;
+    text-align: right;
+}

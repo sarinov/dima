@@ -6,3 +6,29 @@
     border: 2px solid black;
     margin: 5%;
 }
+
+.body-form{
+  margin-left: 35%;
+  margin-top:2%;
+  width:500px;
+}
+
+.title-form{
+  text-align: center;
+}
+
+.form-control{
+  width:500px;
+}
+
+#loginBtn{
+  align:center;
+  margin-left:42%;
+  margin-top:5%;
+}
+
+#RegBtn{
+  align:center;
+  margin-left:38%;
+  margin-top:5%;
+}

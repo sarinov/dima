@@ -1,10 +1,15 @@
-const { Post, Comment } = require('../../models');
+const { Post, Comment, User } = require('../../models');
 const methods = {}
 
 
 
 methods.getAll = async function(){
-    const result = await Post.findAll();
+    const result = await Post.findAll({
+        include: [{
+            model: User,
+            require: false
+        }]
+    });
     return result;
 }
 
